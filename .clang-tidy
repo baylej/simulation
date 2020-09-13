@@ -1,0 +1,25 @@
+---
+Checks: '-*,
+  clang-diagnostic-*,
+  clang-analyzer-*,
+  bugprone-*,
+  boost-*,
+  cert-*,
+  cppcoreguidelines-*,
+    -cppcoreguidelines-avoid-c-arrays,
+    -cppcoreguidelines-avoid-magic-numbers,
+    -cppcoreguidelines-pro-type-member-init,
+  google-explicit-constructor,
+  google-runtime-int,
+  hicpp-*
+  misc-*,
+  modernize-*,
+    -modernize-avoid-c-arrays,
+    -modernize-use-trailing-return-type,
+  performance-*,
+  portability-*,
+  readability-*,
+    -readability-implicit-bool-conversion'
+WarningsAsErrors: ''
+HeaderFilterRegex: '.*'
+...
