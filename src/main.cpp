@@ -28,8 +28,6 @@ using std::cout, std::endl, std::cerr;
 #include <emscripten/emscripten.h>
 #endif
 
-double (*getTime)() = glfwGetTime;
-
 Context_holder CTX_HOLDER;
 
 void error_callback(int error, const char* description)
@@ -50,6 +48,7 @@ void main_loop()
 	// ---
 
 	// Render here
+	CTX_HOLDER.get_context()->loop_run(0.f);
 
 	// ---
 	ImGui::Render();
@@ -83,6 +82,7 @@ int main(void)
 	}
 	glfwMakeContextCurrent(window);
 	CTX_HOLDER.display_height = WINDOW_HEIGHT;
+	CTX_HOLDER.display_width = WINDOW_WIDTH;
 
 	// DearImGui sets and resets the Viewport dimensions at ImGui_ImplOpenGL3_RenderDrawData
 	glViewport(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
@@ -90,6 +90,11 @@ int main(void)
 	// TODO install user defined input callbacks here before initialising DearImGui !!
 	//glfwSetKeyCallback(window, [](GLFWwindow* window, int key, int scancode, int action, int modifiers) { });
 	//glfwSetMouseButtonCallback(window, [](GLFWwindow* window, int button, int action, int modifiers) {});
+	glfwSetWindowSizeCallback(window, [](GLFWwindow* window, int w, int h) {
+		glViewport(0, 0, w, h);
+		CTX_HOLDER.display_height = h;
+		CTX_HOLDER.display_width = w;
+	});
 
 	// ImGui init: create a dear imgui context, setup some options, load fonts
 	IMGUI_CHECKVERSION();

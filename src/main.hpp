@@ -40,8 +40,4 @@ constexpr int WINDOW_WIDTH = 1280;
 constexpr const char* WINDOW_TITLE = "Simulation";
 constexpr bool ALLOW_RESIZING = true;
 
-// Some functions
-// returns the number of seconds since the start
-extern "C" double (*getTime)();
-
 #endif //SIMULATION_MAIN_HPP

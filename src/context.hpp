@@ -20,14 +20,14 @@
 #ifndef SIMULATION_CONTEXT_HPP
 #define SIMULATION_CONTEXT_HPP
 
+class Context_holder;
+
 class Context {
+protected:
+	Context_holder& context_holder;
 public:
-	// run by the main loop, delta_t is the elapsed time since last call.
-	// Does:
-	//  - Input
-	//  - Update
-	//  - Draw
-	//  - Set context
+	Context(Context_holder& ctx_holder) :context_holder(ctx_holder) {};
+
 	virtual void loop_run(float delta_t) = 0;
 	// Called when switching to this context
 	virtual void start() {};
@@ -49,7 +49,7 @@ public:
 	// Global Contexts (set in main function)
 	Context* menu = nullptr;
 
-	// Configuration (defaults)
+	// Display width and height, updated by a callback
 	int display_width = 800;
 	int display_height = 600;
 
