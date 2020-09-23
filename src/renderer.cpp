@@ -16,15 +16,11 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 #include <exception>
+#include <array>
 #include "main.hpp"
 #include "renderer.hpp"
 
-constexpr int strlength(const char* str)
-{
-	return str[0] == '\0'? 0: 1 + strlength(str+1);
-}
-
-static constexpr GLchar* vert_shader_src =
+static constexpr GLchar vert_shader_src[] {
 "#version 100\n"
 
 "attribute vec3 vx_pos;" // Vertice
@@ -46,10 +42,10 @@ static constexpr GLchar* vert_shader_src =
 "	color = vx_col;"
 "	uv = vx_uv;"
 "	has_tex = vx_hastx;"
-"}";
-constexpr GLint vert_shader_src_len = strlength(vert_shader_src);
+"}"};
+constexpr GLint vert_shader_src_len = std::size(vert_shader_src);
 
-constexpr GLchar* frag_shader_src =
+constexpr GLchar frag_shader_src[] {
 "#version 100\n"
 
 "precision mediump int;"
@@ -72,14 +68,15 @@ constexpr GLchar* frag_shader_src =
 "	else {"
 "		gl_FragColor = vec4(color, 1.0);"
 "	}"
-"}";
-constexpr GLint frag_shader_src_len = strlength(frag_shader_src);
+"}"};
+constexpr GLint frag_shader_src_len = std::size(frag_shader_src);
 
 GLuint load_shader(const GLchar* source, GLenum type, GLint source_len)
 {
 	GLuint shader = glCreateShader(type);
 	glShaderSource(shader, 1, &source, &source_len);
-	GLint compile_status; glGetShaderiv(shader, GL_COMPILE_STATUS, &compile_status);
+	GLint compile_status = GL_FALSE;
+	glGetShaderiv(shader, GL_COMPILE_STATUS, &compile_status);
 	if (compile_status == GL_FALSE) {
 		glDeleteShader(shader);
 		// TODO glGetShaderInfoLog()
@@ -92,12 +89,12 @@ GLuint load_shader(const GLchar* source, GLenum type, GLint source_len)
 Renderer::Renderer()
 {
 	GLuint program = glCreateProgram();
-	GLuint vert_shader = load_shader(vert_shader_src, GL_VERTEX_SHADER, vert_shader_src_len);
-	GLuint frag_shader = load_shader(frag_shader_src, GL_FRAGMENT_SHADER, frag_shader_src_len);
+	GLuint vert_shader = load_shader(static_cast<const GLchar*>(vert_shader_src), GL_VERTEX_SHADER, vert_shader_src_len);
+	GLuint frag_shader = load_shader(static_cast<const GLchar*>(frag_shader_src), GL_FRAGMENT_SHADER, frag_shader_src_len);
 	glAttachShader(program, vert_shader);
 	glAttachShader(program, frag_shader);
 	glLinkProgram(program);
-	GLint link_status;
+	GLint link_status = GL_FALSE;
 	glGetProgramiv(program, GL_LINK_STATUS, &link_status);
 	if (link_status == GL_FALSE) {
 		// TODO info

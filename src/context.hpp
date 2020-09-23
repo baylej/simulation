@@ -20,14 +20,8 @@
 #ifndef SIMULATION_CONTEXT_HPP
 #define SIMULATION_CONTEXT_HPP
 
-class Context_holder;
-
 class Context {
-protected:
-	Context_holder& context_holder;
 public:
-	Context(Context_holder& ctx_holder) :context_holder(ctx_holder) {};
-
 	virtual void loop_run(float delta_t) = 0;
 	// Called when switching to this context
 	virtual void start() {};
@@ -36,7 +30,6 @@ public:
 // Holds the running context, set/get the running context
 class Context_holder {
 public:
-	Context_holder() = default;
 	Context_holder(const Context_holder&) = delete;
 	Context_holder(Context_holder&&) = delete;
 	Context_holder& operator =(const Context_holder&) = delete;
@@ -53,9 +46,15 @@ public:
 	int display_width = 800;
 	int display_height = 600;
 
+	// Unique static instance
+	static Context_holder& get();
+
 private:
+	Context_holder() = default;
+
 	Context* current = nullptr;
+
+	static Context_holder instance;
 };
-extern Context_holder CTX_HOLDER;
 
 #endif //SIMULATION_CONTEXT_HPP

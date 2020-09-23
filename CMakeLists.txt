@@ -11,6 +11,7 @@ file(GLOB imgui_source deps/imgui/*.cpp)
 add_executable(simulation
   src/main.cpp
   src/renderer.cpp
+  src/menu.cpp
   ${imgui_source})
 
 target_include_directories(simulation PRIVATE deps)
