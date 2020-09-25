@@ -51,6 +51,7 @@ public:
 
 private:
 	Context_holder() = default;
+	~Context_holder() = default;
 
 	Context* current = nullptr;
 

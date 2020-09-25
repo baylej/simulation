@@ -22,6 +22,7 @@ void Menu::loop_run(float delta_t)
 {
 	Context_holder& ctxhldr = Context_holder::get();
 	ImGui::SetNextWindowPos(ImVec2{ctxhldr.display_width/2.f, ctxhldr.display_height/2.f}, 0, ImVec2{.5f, .5f});
+	ImGui::SetNextWindowSize(ImVec2{0.f, 0.f});
 	ImGui::Begin("Menu", nullptr, ImGuiWindowFlags_NoDecoration);
 
 	if (ImGui::Button("Help")) {
@@ -39,6 +40,12 @@ void Menu::loop_run(float delta_t)
 	if (ImGui::Button("Simulation 4")) {
 		// TODO
 	}
+
+#ifndef EMSCRIPTEN
+	if (ImGui::Button("Exit")) {
+		terminate();
+	}
+#endif
 
 	ImGui::End();
 

@@ -17,6 +17,7 @@
 */
 #include "main.hpp"
 #include "context.hpp"
+#include "menu.hpp"
 
 #include <iostream>
 using std::cout, std::endl, std::cerr;
@@ -85,6 +86,9 @@ int main(void)
 	Context_holder::get().display_height = WINDOW_HEIGHT;
 	Context_holder::get().display_width = WINDOW_WIDTH;
 
+	Menu menu;
+	Context_holder::get().menu = &menu;
+	Context_holder::get().set_context(&menu);
 
 	// DearImGui sets and resets the Viewport dimensions at ImGui_ImplOpenGL3_RenderDrawData
 	glViewport(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
@@ -126,4 +130,9 @@ int main(void)
 	glfwTerminate();
 
 	return 0;
+}
+
+void terminate()
+{
+	glfwSetWindowShouldClose(window, GLFW_TRUE);
 }

@@ -1,5 +1,5 @@
 /*
-    3D Physics Simulations - Main: include GLM and DearImGui and other headers
+    3D Physics Simulations - Main: includes GL ES3 and GLM and DearImGui and other headers
     Copyright (C) 2020  Jonathan Bayle
 
     This program is free software: you can redistribute it and/or modify
@@ -39,5 +39,7 @@ constexpr int WINDOW_HEIGHT = 720;
 constexpr int WINDOW_WIDTH = 1280;
 constexpr const char* WINDOW_TITLE = "Simulation";
 constexpr bool ALLOW_RESIZING = true;
+
+void terminate();
 
 #endif //SIMULATION_MAIN_HPP
