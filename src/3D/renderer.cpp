@@ -17,7 +17,7 @@
 */
 #include <exception>
 #include <array>
-#include "main.hpp"
+#include "../main.hpp"
 #include "renderer.hpp"
 
 static constexpr GLchar vert_shader_src[] {

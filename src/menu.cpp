@@ -20,8 +20,8 @@
 
 void Menu::loop_run(float delta_t)
 {
-	Context_holder& ctxhldr = Context_holder::get();
-	ImGui::SetNextWindowPos(ImVec2{ctxhldr.display_width/2.f, ctxhldr.display_height/2.f}, 0, ImVec2{.5f, .5f});
+	Main* main = Main::get();
+	ImGui::SetNextWindowPos(ImVec2{main->display_width/2.f, main->display_height/2.f}, 0, ImVec2{.5f, .5f});
 	ImGui::SetNextWindowSize(ImVec2{0.f, 0.f});
 	ImGui::Begin("Menu", nullptr, ImGuiWindowFlags_NoDecoration);
 
@@ -43,7 +43,7 @@ void Menu::loop_run(float delta_t)
 
 #ifndef EMSCRIPTEN
 	if (ImGui::Button("Exit")) {
-		terminate();
+		Main::get()->terminate();
 	}
 #endif
 

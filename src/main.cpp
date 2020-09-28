@@ -16,30 +16,98 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 #include "main.hpp"
+#include "simerror.hpp"
 #include "context.hpp"
 #include "menu.hpp"
 
 #include <iostream>
 using std::cout, std::endl, std::cerr;
 
-// GLFW is the modern, portable way to create a Window and an OpenGL (ES) context
-#include <GLFW/glfw3.h>
-
 #ifdef EMSCRIPTEN
 #include <emscripten/emscripten.h>
 #endif
 
-Context_holder Context_holder::instance{};
-Context_holder& Context_holder::get() { return Context_holder::instance; };
+Context_holder Context_holder::instance;
+Main* Main::instance = nullptr;
 
 void error_callback(int error, const char* description)
 {
 	cerr << "GLFW: Error " << error << ": " << description << endl;
 }
 
-static GLFWwindow* window = nullptr;
+int main(void)
+{
+	Main main;
+	Main::instance = &main;
 
-void main_loop()
+	try {
+		main.init();
+		main.run_main_loop();
+	}
+	catch (const std::exception& ex) {
+		std::cout << ex.what() << std::endl;
+	}
+	main.cleanup();
+
+	return 0;
+}
+
+void Main::terminate()
+{
+	glfwSetWindowShouldClose(window, GLFW_TRUE);
+}
+
+void Main::init()
+{
+	glfwSetErrorCallback(error_callback);
+
+	if (!glfwInit()) {
+		throw Sim_error("GLFW: cannot initialise");
+	}
+
+	glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_ES_API);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
+	glfwWindowHint(GLFW_SAMPLES, MSAA_SAMPLES); // Multisampling (MSAA)
+	if constexpr (!ALLOW_RESIZING) glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
+	if constexpr (WANT_DEBUG_CTX) glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GLFW_TRUE);
+	window = glfwCreateWindow(WINDOW_WIDTH, WINDOW_HEIGHT, WINDOW_TITLE, nullptr, nullptr);
+	if (!static_cast<bool>(window)) {
+		glfwTerminate(); // TODO move to cleanup(); using a bool member variable
+		throw Sim_error("GLFW: cannot create window");
+	}
+	glfwMakeContextCurrent(window);
+
+	// DearImGui sets and resets the Viewport dimensions at ImGui_ImplOpenGL3_RenderDrawData
+	glViewport(0, 0, display_width, display_height);
+
+	// TODO install user defined input callbacks here before initialising DearImGui !!
+	//glfwSetKeyCallback(window, [](GLFWwindow* window, int key, int scancode, int action, int modifiers) { });
+	//glfwSetMouseButtonCallback(window, [](GLFWwindow* window, int button, int action, int modifiers) {});
+	glfwSetWindowSizeCallback(window, [](GLFWwindow* window, int w, int h) {
+		glViewport(0, 0, w, h);
+		Main::get()->display_height = h;
+		Main::get()->display_width = w;
+	});
+
+	// ImGui init: create a dear imgui context, setup some options, load fonts
+	IMGUI_CHECKVERSION();
+	ImGui::CreateContext();
+	ImGuiIO& io = ImGui::GetIO();
+	ImGui::StyleColorsDark();
+	// TODO: Set optional io.ConfigFlags values.
+	//   e.g. 'io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard' to enable keyboard controls.
+	// TODO: Fill optional fields of the io structure later.
+	ImGui_ImplGlfw_InitForOpenGL(window, true);
+	ImGui_ImplOpenGL3_Init();
+
+	// Initial context is the menu
+	Menu* menu = new Menu;
+	Context_holder::get().menu = menu;
+	Context_holder::get().set_context(menu);
+}
+
+void Main::main_loop()
 {
 	glClearColor(1.0, 1.0, 0.0, 1.0);
 	glClear(GL_COLOR_BUFFER_BIT);
@@ -61,78 +129,27 @@ void main_loop()
 	glfwPollEvents();
 }
 
-int main(void)
+void Main::run_main_loop()
 {
-	glfwSetErrorCallback(error_callback);
-
-	if (!glfwInit()) {
-		cerr << "GLFW: cannot initialise" << endl;
-		return -1;
-	}
-
-	glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_ES_API);
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
-	glfwWindowHint(GLFW_SAMPLES, MSAA_SAMPLES); // Multisampling (MSAA)
-	if constexpr (!ALLOW_RESIZING) glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
-	if constexpr (WANT_DEBUG_CTX) glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GLFW_TRUE);
-	window = glfwCreateWindow(WINDOW_WIDTH, WINDOW_HEIGHT, WINDOW_TITLE, nullptr, nullptr);
-	if (!static_cast<bool>(window)) {
-		cerr << "GLFW: cannot create window" << endl;
-		glfwTerminate();
-		return -1;
-	}
-	glfwMakeContextCurrent(window);
-	Context_holder::get().display_height = WINDOW_HEIGHT;
-	Context_holder::get().display_width = WINDOW_WIDTH;
-
-	Menu menu;
-	Context_holder::get().menu = &menu;
-	Context_holder::get().set_context(&menu);
-
-	// DearImGui sets and resets the Viewport dimensions at ImGui_ImplOpenGL3_RenderDrawData
-	glViewport(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
-
-	// TODO install user defined input callbacks here before initialising DearImGui !!
-	//glfwSetKeyCallback(window, [](GLFWwindow* window, int key, int scancode, int action, int modifiers) { });
-	//glfwSetMouseButtonCallback(window, [](GLFWwindow* window, int button, int action, int modifiers) {});
-	glfwSetWindowSizeCallback(window, [](GLFWwindow* window, int w, int h) {
-		glViewport(0, 0, w, h);
-		Context_holder::get().display_height = h;
-		Context_holder::get().display_width = w;
-	});
-
-	// ImGui init: create a dear imgui context, setup some options, load fonts
-	IMGUI_CHECKVERSION();
-	ImGui::CreateContext();
-	ImGuiIO& io = ImGui::GetIO();
-	ImGui::StyleColorsDark();
-	// TODO: Set optional io.ConfigFlags values.
-	//   e.g. 'io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard' to enable keyboard controls.
-	// TODO: Fill optional fields of the io structure later.
-	ImGui_ImplGlfw_InitForOpenGL(window, true);
-	ImGui_ImplOpenGL3_Init();
-
-	// Main Loop
 #ifdef EMSCRIPTEN
-	emscripten_set_main_loop(main_loop, 0, 1);
+	emscripten_set_main_loop([]() { Main::get()->main_loop(); }, 0, 1);
 #else
 	while (!glfwWindowShouldClose(window)) {
 		main_loop();
 	}
 #endif
+}
 
-	// Cleanup, shutdown
+void Main::cleanup()
+{
 	ImGui_ImplOpenGL3_Shutdown();
 	ImGui_ImplGlfw_Shutdown();
 	ImGui::DestroyContext();
 	glfwDestroyWindow(window);
 	glfwTerminate();
-
-	return 0;
 }
 
-void terminate()
+void Main::error_callback(int error, const char* description)
 {
-	glfwSetWindowShouldClose(window, GLFW_TRUE);
+	cerr << "GLFW: Error " << error << ": " << description << endl;
 }

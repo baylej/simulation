@@ -30,10 +30,6 @@ public:
 // Holds the running context, set/get the running context
 class Context_holder {
 public:
-	Context_holder(const Context_holder&) = delete;
-	Context_holder(Context_holder&&) = delete;
-	Context_holder& operator =(const Context_holder&) = delete;
-	Context_holder& operator =(Context_holder&&) = delete;
 
 	// Context manipulation
 	void set_context(Context* ctx) noexcept { ctx->start(); current = ctx; }
@@ -42,16 +38,16 @@ public:
 	// Global Contexts (set in main function)
 	Context* menu = nullptr;
 
-	// Display width and height, updated by a callback
-	int display_width = 800;
-	int display_height = 600;
-
 	// Unique static instance
-	static Context_holder& get();
+	static Context_holder& get() { return Context_holder::instance; };
 
 private:
 	Context_holder() = default;
 	~Context_holder() = default;
+	Context_holder(const Context_holder&) = delete;
+	Context_holder(Context_holder&&) = delete;
+	Context_holder& operator =(const Context_holder&) = delete;
+	Context_holder& operator =(Context_holder&&) = delete;
 
 	Context* current = nullptr;
 

@@ -32,6 +32,9 @@
 // OpenGL ES 3, no loader needed unless you need a specific extension
 #include <GLES3/gl3.h>
 
+// GLFW is the modern, portable way to create a Window and an OpenGL (ES) context
+#include <GLFW/glfw3.h>
+
 // Configuration & Defaults
 constexpr bool WANT_DEBUG_CTX = true;
 constexpr unsigned MSAA_SAMPLES = 2; // 0 to disable
@@ -40,6 +43,35 @@ constexpr int WINDOW_WIDTH = 1280;
 constexpr const char* WINDOW_TITLE = "Simulation";
 constexpr bool ALLOW_RESIZING = true;
 
-void terminate();
+class Main {
+public:
+	void init(); // Call once at the very beginning
+	void main_loop(); // you're probably looking for `run_main_loop()`
+	void run_main_loop(); // Does not return, runs `main_loop()` in loop
+	void cleanup(); // Call once at the very end
+
+	void terminate(); // Call it to exit from `run_main_loop()` gracefully
+
+	static Main* get() { return instance; };
+
+	// Display width and height, updated by a callback
+	int display_width = WINDOW_WIDTH;
+	int display_height = WINDOW_HEIGHT;
+
+private:
+	GLFWwindow* window = nullptr;
+	static Main* instance; // Please set the instance (in main())
+
+	static void error_callback(int, const char*);
+
+	friend int main(); // Main can only be constructed in function main()
+
+	Main() = default;
+	~Main() = default;
+	Main(const Main&) = delete;
+	Main(const Main&&) = delete;
+	Main& operator=(const Main&) = delete;
+	Main& operator=(Main&&) = delete;
+};
 
 #endif //SIMULATION_MAIN_HPP
