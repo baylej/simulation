@@ -24,7 +24,7 @@
 
 class Sim_error: public std::runtime_error {
 public:
-	Sim_error(const std::string& what): std::runtime_error(what) {};
+	explicit Sim_error(const std::string& what): std::runtime_error(what) {};
 
 	Sim_error(const runtime_error&) = delete;
 	Sim_error(const runtime_error&&) = delete;

@@ -13,6 +13,7 @@ add_executable(simulation
   src/menu.cpp
 
   src/3D/renderer.cpp
+  src/3D/mesh.cpp
 
   ${imgui_source})
 

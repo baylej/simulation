@@ -21,7 +21,7 @@
 #include "menu.hpp"
 
 #include <iostream>
-using std::cout, std::endl, std::cerr;
+using std::endl, std::cerr;
 
 #ifdef EMSCRIPTEN
 #include <emscripten/emscripten.h>
@@ -29,11 +29,6 @@ using std::cout, std::endl, std::cerr;
 
 Context_holder Context_holder::instance;
 Main* Main::instance = nullptr;
-
-void error_callback(int error, const char* description)
-{
-	cerr << "GLFW: Error " << error << ": " << description << endl;
-}
 
 int main(void)
 {
@@ -45,7 +40,7 @@ int main(void)
 		main.run_main_loop();
 	}
 	catch (const std::exception& ex) {
-		std::cout << ex.what() << std::endl;
+		cerr << ex.what() << endl;
 	}
 	main.cleanup();
 
@@ -73,7 +68,6 @@ void Main::init()
 	if constexpr (WANT_DEBUG_CTX) glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GLFW_TRUE);
 	window = glfwCreateWindow(WINDOW_WIDTH, WINDOW_HEIGHT, WINDOW_TITLE, nullptr, nullptr);
 	if (!static_cast<bool>(window)) {
-		glfwTerminate(); // TODO move to cleanup(); using a bool member variable
 		throw Sim_error("GLFW: cannot create window");
 	}
 	glfwMakeContextCurrent(window);
@@ -142,11 +136,15 @@ void Main::run_main_loop()
 
 void Main::cleanup()
 {
-	ImGui_ImplOpenGL3_Shutdown();
-	ImGui_ImplGlfw_Shutdown();
-	ImGui::DestroyContext();
-	glfwDestroyWindow(window);
-	glfwTerminate();
+	if (ImGui::GetCurrentContext() != nullptr) {
+		ImGui_ImplOpenGL3_Shutdown();
+		ImGui_ImplGlfw_Shutdown();
+		ImGui::DestroyContext();
+	}
+	if (window != nullptr) {
+		glfwDestroyWindow(window);
+	}
+	glfwTerminate(); // safe
 }
 
 void Main::error_callback(int error, const char* description)

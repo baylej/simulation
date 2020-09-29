@@ -33,7 +33,7 @@ public:
 
 	// Context manipulation
 	void set_context(Context* ctx) noexcept { ctx->start(); current = ctx; }
-	Context* get_context() const noexcept { return current; }
+	[[nodiscard]] Context* get_context() const noexcept { return current; }
 
 	// Global Contexts (set in main function)
 	Context* menu = nullptr;

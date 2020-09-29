@@ -1,5 +1,5 @@
 /*
-    3D Physics Simulations - Renderer: 3D Renderer (OpenGL ES 3)
+    3D Physics Simulations - Mesh: Indexed mesh class
     Copyright (C) 2020  Jonathan Bayle
 
     This program is free software: you can redistribute it and/or modify
@@ -17,24 +17,36 @@
 */
 #pragma once
 
-#ifndef SIMULATION_RENDERER_HPP
-#define SIMULATION_RENDERER_HPP
+#ifndef SIMULATION_MESH_HPP
+#define SIMULATION_MESH_HPP
 
 #include <GLES3/gl3.h>
 
-class Renderer {
+#include <vector>
+
+using std::vector;
+
+class Mesh {
 public:
-	// Compiles shaders, link program, use program
-	Renderer();
+	// Creates GL buffers and loads the data
+	Mesh(const vector<GLuint>& indices, const vector<GLfloat>& vertices, const vector<GLfloat>& colors/*, const vector<GLfloat>& uvs*/);
+	~Mesh();
 
-	// Location of vertex attributes defined in the vertex shader
-	constexpr static GLuint vertex_pos_attr_loc = 0;
-	constexpr static GLuint vertex_col_attr_loc = 1;
+	void draw() const;
 
-	[[nodiscard]] GLuint get_program_name() const { return program; };
+	constexpr static GLuint prim_type = GL_TRIANGLES;
+	constexpr static GLuint prim_component_number = 3;
 
 private:
-	GLuint program;
+	// number of element in the indices buffer
+	const GLuint indices_size;
+	// VBO names
+	GLuint indices_buf = GL_NONE;
+	GLuint vertices_buf = GL_NONE;
+	GLuint colours_buf = GL_NONE;
+	//GLuint uvs_buf = GL_NONE;
+	// VAO name
+	GLuint vao = GL_NONE;
 };
 
-#endif //SIMULATION_RENDERER_HPP
+#endif //SIMULATION_MESH_HPP
