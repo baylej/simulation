@@ -26,6 +26,8 @@
 
 using std::vector;
 
+namespace Engine::N3D {
+
 class Mesh {
 public:
 	// Creates GL buffers and loads the data
@@ -48,5 +50,13 @@ private:
 	// VAO name
 	GLuint vao = GL_NONE;
 };
+
+class Triangle: public Mesh {
+public:
+	Triangle();
+	~Triangle() = default;
+};
+
+}
 
 #endif //SIMULATION_MESH_HPP

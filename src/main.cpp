@@ -16,9 +16,9 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 #include "main.hpp"
-#include "simerror.hpp"
+#include "error.hpp"
 #include "context.hpp"
-#include "menu.hpp"
+#include "contexts/menu.hpp"
 
 #include <iostream>
 using std::endl, std::cerr;
@@ -27,25 +27,10 @@ using std::endl, std::cerr;
 #include <emscripten/emscripten.h>
 #endif
 
+namespace Engine {
+
 Context_holder Context_holder::instance;
 Main* Main::instance = nullptr;
-
-int main(void)
-{
-	Main main;
-	Main::instance = &main;
-
-	try {
-		main.init();
-		main.run_main_loop();
-	}
-	catch (const std::exception& ex) {
-		cerr << ex.what() << endl;
-	}
-	main.cleanup();
-
-	return 0;
-}
 
 void Main::terminate()
 {
@@ -57,7 +42,7 @@ void Main::init()
 	glfwSetErrorCallback(error_callback);
 
 	if (!glfwInit()) {
-		throw Sim_error("GLFW: cannot initialise");
+		throw Error("GLFW: cannot initialise");
 	}
 
 	glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_ES_API);
@@ -68,7 +53,7 @@ void Main::init()
 	if constexpr (WANT_DEBUG_CTX) glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GLFW_TRUE);
 	window = glfwCreateWindow(WINDOW_WIDTH, WINDOW_HEIGHT, WINDOW_TITLE, nullptr, nullptr);
 	if (!static_cast<bool>(window)) {
-		throw Sim_error("GLFW: cannot create window");
+		throw Error("GLFW: cannot create window");
 	}
 	glfwMakeContextCurrent(window);
 
@@ -87,7 +72,7 @@ void Main::init()
 	// ImGui init: create a dear imgui context, setup some options, load fonts
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
-	ImGuiIO& io = ImGui::GetIO();
+	ImGuiIO &io = ImGui::GetIO();
 	ImGui::StyleColorsDark();
 	// TODO: Set optional io.ConfigFlags values.
 	//   e.g. 'io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard' to enable keyboard controls.
@@ -96,7 +81,7 @@ void Main::init()
 	ImGui_ImplOpenGL3_Init();
 
 	// Initial context is the menu
-	Menu* menu = new Menu;
+	Contexts::Menu* menu = new Contexts::Menu;
 	Context_holder::get().menu = menu;
 	Context_holder::get().set_context(menu);
 }
@@ -150,4 +135,25 @@ void Main::cleanup()
 void Main::error_callback(int error, const char* description)
 {
 	cerr << "GLFW: Error " << error << ": " << description << endl;
+}
+
+} // namespace Engine
+
+using Engine::Main;
+
+int main(void)
+{
+	Main main;
+	Main::instance = &main;
+
+	try {
+		main.init();
+		main.run_main_loop();
+	}
+	catch (const std::exception &ex) {
+		cerr << ex.what() << endl;
+	}
+	main.cleanup();
+
+	return 0;
 }

@@ -20,6 +20,8 @@
 #include "utils.hpp"
 #include "renderer.hpp"
 
+namespace Engine::N3D {
+
 static constexpr GLchar vert_shader_src[] {
 "#version 300 es\n"
 
@@ -120,8 +122,14 @@ Renderer::Renderer()
 	program = load_program({vert_shader, frag_shader});
 
 	// Flag shaders for deletion
-	glDeleteProgram(vert_shader);
-	glDeleteProgram(frag_shader);
+	glDeleteShader(vert_shader);
+	glDeleteShader(frag_shader);
 
 	check_gl_error("Renderer::ctor"s);
 }
+
+Renderer::~Renderer() {
+	glDeleteProgram(program);
+}
+
+} // namespace Engine::N3D

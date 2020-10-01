@@ -10,7 +10,8 @@ file(GLOB imgui_source deps/imgui/*.cpp)
 
 add_executable(simulation
   src/main.cpp
-  src/menu.cpp
+
+  src/contexts/menu.cpp
 
   src/3D/renderer.cpp
   src/3D/mesh.cpp

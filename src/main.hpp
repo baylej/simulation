@@ -35,6 +35,11 @@
 // GLFW is the modern, portable way to create a Window and an OpenGL (ES) context
 #include <GLFW/glfw3.h>
 
+// Forward declaration of main function required to add it as a friend to class Main
+int main();
+
+namespace Engine {
+
 // Configuration & Defaults
 constexpr bool WANT_DEBUG_CTX = true;
 constexpr unsigned MSAA_SAMPLES = 2; // 0 to disable
@@ -64,7 +69,7 @@ private:
 
 	static void error_callback(int, const char*);
 
-	friend int main(); // Main can only be constructed in function main()
+	friend int ::main(); // Main can only be constructed in function main()
 
 	Main() = default;
 	~Main() = default;
@@ -73,5 +78,7 @@ private:
 	Main& operator=(const Main&) = delete;
 	Main& operator=(Main&&) = delete;
 };
+
+} // namespace Engine
 
 #endif //SIMULATION_MAIN_HPP

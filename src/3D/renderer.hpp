@@ -22,10 +22,15 @@
 
 #include <GLES3/gl3.h>
 
+namespace Engine::N3D {
+
 class Renderer {
 public:
 	// Compiles shaders, link program, use program
 	Renderer();
+	~Renderer();
+	Renderer(const Renderer &) = delete;
+	Renderer(Renderer &&) = default;
 
 	// Location of vertex attributes defined in the vertex shader
 	constexpr static GLuint vertex_pos_attr_loc = 0;
@@ -36,5 +41,7 @@ public:
 private:
 	GLuint program;
 };
+
+} // namespace Engine::N3D
 
 #endif //SIMULATION_RENDERER_HPP

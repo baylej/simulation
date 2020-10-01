@@ -17,17 +17,21 @@
 */
 #pragma once
 
-#ifndef SIMULATION_SIMERROR_HPP
-#define SIMULATION_SIMERROR_HPP
+#ifndef SIMULATION_ERROR_HPP
+#define SIMULATION_ERROR_HPP
 
 #include <stdexcept>
 
-class Sim_error: public std::runtime_error {
-public:
-	explicit Sim_error(const std::string& what): std::runtime_error(what) {};
+namespace Engine {
 
-	Sim_error(const runtime_error&) = delete;
-	Sim_error(const runtime_error&&) = delete;
+class Error: public std::runtime_error {
+public:
+	explicit Error(const std::string& what): std::runtime_error(what) {};
+
+	Error(const runtime_error&) = delete;
+	Error(const runtime_error&&) = delete;
 };
 
-#endif //SIMULATION_SIMERROR_HPP
+} // namespace Engine
+
+#endif //SIMULATION_ERROR_HPP

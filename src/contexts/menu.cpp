@@ -16,12 +16,14 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 #include "menu.hpp"
-#include "main.hpp"
+#include "../main.hpp"
+
+namespace Engine::Contexts {
 
 void Menu::loop_run(float delta_t)
 {
 	Main* main = Main::get();
-	ImGui::SetNextWindowPos(ImVec2{main->display_width/2.f, main->display_height/2.f}, 0, ImVec2{.5f, .5f});
+	ImGui::SetNextWindowPos(ImVec2{main->display_width / 2.f, main->display_height / 2.f}, 0, ImVec2{.5f, .5f});
 	ImGui::SetNextWindowSize(ImVec2{0.f, 0.f});
 	ImGui::Begin("Menu", nullptr, ImGuiWindowFlags_NoDecoration);
 
@@ -55,7 +57,4 @@ void Menu::loop_run(float delta_t)
 	}
 }
 
-void Menu::start()
-{
-
-}
+} // namespace Engine::Contexts

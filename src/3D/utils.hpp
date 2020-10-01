@@ -28,6 +28,8 @@
 
 using std::literals::string_literals::operator""s;
 
+namespace Engine::N3D {
+
 // Checks whether an error occurred in the GL calls performed until now
 // throws a runtime_exception
 inline void check_gl_error(const std::string& where)
@@ -37,12 +39,12 @@ inline void check_gl_error(const std::string& where)
 		std::stringstream msg;
 		msg << "GL Error: "s;
 		switch (error) {
-			case GL_INVALID_ENUM: msg << "invalid enum value"s; break;
-			case GL_INVALID_VALUE: msg << "invalid argument"s; break;
-			case GL_INVALID_OPERATION: msg << "operation not allowed"s; break;
-			case GL_INVALID_FRAMEBUFFER_OPERATION: msg << "framebuffer operation not allowed"s; break;
-			case GL_OUT_OF_MEMORY: msg << "OUT OF MEMORY"s; break; // this error is fatal to the GL state
-			default:  msg << "unknown error : "s << error;
+			case GL_INVALID_ENUM:                  msg << "invalid enum value"s;                   break;
+			case GL_INVALID_VALUE:                 msg << "invalid argument"s;                     break;
+			case GL_INVALID_OPERATION:             msg << "operation not allowed"s;                break;
+			case GL_INVALID_FRAMEBUFFER_OPERATION: msg << "framebuffer operation not allowed"s;    break;
+			case GL_OUT_OF_MEMORY:                 msg << "OUT OF MEMORY"s;                        break; // this error is fatal to the GL state
+			default:                               msg << "unknown error : "s << error;
 		}
 		msg << ", at " << where;
 		throw std::runtime_error(msg.str());
@@ -51,5 +53,7 @@ inline void check_gl_error(const std::string& where)
 
 GLuint load_shader(const GLchar* source, GLenum type, GLint source_len);
 GLuint load_program(std::initializer_list<GLuint> shaders);
+
+} // namespace Engine::N3D
 
 #endif //SIMULATION_UTILS_HPP

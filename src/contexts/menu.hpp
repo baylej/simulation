@@ -20,15 +20,18 @@
 #ifndef SIMULATION_MENU_HPP
 #define SIMULATION_MENU_HPP
 
-#include "context.hpp"
+#include "../context.hpp"
 
-class Menu: public Context {
+namespace Engine::Contexts {
+
+class Menu : public Context {
 public:
 	void loop_run(float delta_t) override;
-	void start() override;
 
 private:
 	bool show_help = false;
 };
+
+} // namespace Engine::Contexts
 
 #endif //SIMULATION_MENU_HPP

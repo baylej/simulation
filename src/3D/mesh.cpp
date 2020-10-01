@@ -19,6 +19,8 @@
 #include "utils.hpp"
 #include "renderer.hpp"
 
+namespace Engine::N3D {
+
 Mesh::Mesh(const vector<GLuint>& indices, const vector<GLfloat>& vertices, const vector<GLfloat>& colours/*, const vector<GLfloat>& uvs*/):
 		indices_size(indices.size())
 {
@@ -66,4 +68,10 @@ void Mesh::draw() const
 	glBindVertexArray(GL_NONE);
 
 	check_gl_error("Mesh::draw"s);
+}
+
+Triangle::Triangle():
+Mesh({0, 1, 2}, {0, 1, 0,  1, 0, 0,  -1, 0, 0}, {1, 0, 0,  0, 1, 0,  0, 0, 1})
+{}
+
 }

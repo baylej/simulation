@@ -20,6 +20,8 @@
 #ifndef SIMULATION_CONTEXT_HPP
 #define SIMULATION_CONTEXT_HPP
 
+namespace Engine {
+
 class Context {
 public:
 	virtual void loop_run(float delta_t) = 0;
@@ -53,5 +55,7 @@ private:
 
 	static Context_holder instance;
 };
+
+} // namespace Engine
 
 #endif //SIMULATION_CONTEXT_HPP
