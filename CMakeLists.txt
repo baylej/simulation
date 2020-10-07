@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.15)
 
 project(simulation VERSION 1.0.0 LANGUAGES C CXX)
 
-if(CMAKE_SYSTEM_NAME EQUAL "Emscripten")
+if(CMAKE_SYSTEM_NAME STREQUAL "Emscripten")
   set(EMSCRIPTEN True)
 endif()
 
@@ -23,6 +23,10 @@ target_include_directories(simulation PRIVATE deps)
 target_compile_definitions(simulation
   PRIVATE IMGUI_IMPL_OPENGL_ES3
   PRIVATE GLFW_INCLUDE_NONE)
+
+if(CMAKE_BUILD_TYPE STREQUAL "Release")
+  target_compile_definitions(simulation GLM_FORCE_INLINE)
+endif()
 
 if(EMSCRIPTEN)
   target_compile_definitions(simulation PRIVATE EMSCRIPTEN)

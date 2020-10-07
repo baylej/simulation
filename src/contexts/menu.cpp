@@ -18,6 +18,8 @@
 #include "menu.hpp"
 #include "../main.hpp"
 
+#include <imgui/imgui.h>
+
 namespace Engine::Contexts {
 
 void Menu::loop_run(float delta_t)

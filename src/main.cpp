@@ -20,6 +20,14 @@
 #include "context.hpp"
 #include "contexts/menu.hpp"
 
+// ImGui is included first in example programs
+#include <imgui/imgui.h>
+#include <imgui/imgui_impl_glfw.h>
+#include <imgui/imgui_impl_opengl3.h>
+
+// OpenGL ES 3, no loader needed unless you need a specific extension
+#include <GLES3/gl3.h>
+
 #include <iostream>
 using std::endl, std::cerr;
 

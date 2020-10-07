@@ -20,18 +20,6 @@
 #ifndef SIMULATION_MAIN_HPP
 #define SIMULATION_MAIN_HPP
 
-// Math lib
-// FIXME: set IM_VEC2_CLASS_EXTRA and IM_VEC4_CLASS_EXTRA to cast from glm::vec2 and glm::vec4 as explained in imconfig.h ?
-#include <glm/glm.hpp>
-
-// ImGui is included first in example programs
-#include <imgui/imgui.h>
-#include <imgui/imgui_impl_glfw.h>
-#include <imgui/imgui_impl_opengl3.h>
-
-// OpenGL ES 3, no loader needed unless you need a specific extension
-#include <GLES3/gl3.h>
-
 // GLFW is the modern, portable way to create a Window and an OpenGL (ES) context
 #include <GLFW/glfw3.h>
 

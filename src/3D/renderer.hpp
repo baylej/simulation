@@ -22,6 +22,8 @@
 
 #include <GLES3/gl3.h>
 
+#include "camera.hpp"
+
 namespace Engine::N3D {
 
 class Renderer {
@@ -36,10 +38,24 @@ public:
 	constexpr static GLuint vertex_pos_attr_loc = 0;
 	constexpr static GLuint vertex_col_attr_loc = 1;
 
-	[[nodiscard]] GLuint get_program_name() const { return program; };
+	// glUseProgram this renderer's program
+	void use_program() { glUseProgram(program); };
+
+	// To use the following functions, this renderer's program must be in use
+	void set_proj_view_matrices(const Camera& camera);
 
 private:
 	GLuint program;
+
+	// Location of uniforms
+	// - Vertex shader
+	GLint proj_m4_loc;
+	GLint view_m4_loc;
+	GLint model_m4_loc;
+	// - Fragment shader
+	GLint has_tex_loc;
+	GLint tex_loc;
+	GLint tex_m3_loc;
 };
 
 } // namespace Engine::N3D

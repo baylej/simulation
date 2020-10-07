@@ -15,10 +15,12 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
-#include <array>
-
 #include "utils.hpp"
 #include "renderer.hpp"
+
+#include <array>
+
+#include <glm/gtc/type_ptr.hpp>
 
 namespace Engine::N3D {
 
@@ -54,12 +56,12 @@ constexpr GLchar frag_shader_src[] {
 
 "uniform bool has_tex;"
 "uniform sampler2D tex;"
-"uniform mat3 tex_trans;"
+"uniform mat3 tex_m3;"
 
 "void main()"
 "{"/*
 "	if (has_tex) {"
-"		vec3 tex_coord = tex_trans * vec3(uv, 1.);"
+"		vec3 tex_coord = tex_m3 * vec3(uv, 1.);"
 "		frag_colour = texture2D(tex, tex_coord.st);"
 //	"		frag_colour = vec4(1., 0., 0., 1.0);" // DEBUG
 "	}"
@@ -114,6 +116,15 @@ GLuint load_program(std::initializer_list<GLuint> shaders)
 	return program;
 }
 
+GLint get_check_uniform(GLuint program, const GLchar* uniform_name)
+{
+	GLint res = glGetUniformLocation(program, uniform_name);
+	if (res == -1) {
+		throw std::runtime_error("GL Error: uniform location not found: "s + uniform_name);
+	}
+	return res;
+}
+
 Renderer::Renderer()
 {
 	GLuint vert_shader = load_shader(static_cast<const GLchar*>(vert_shader_src), GL_VERTEX_SHADER, vert_shader_src_len);
@@ -125,11 +136,28 @@ Renderer::Renderer()
 	glDeleteShader(vert_shader);
 	glDeleteShader(frag_shader);
 
-	check_gl_error("Renderer::ctor"s);
+	check_gl_error("Renderer::ctor#1"s);
+
+	// Uniform locations in the vertex shader
+	proj_m4_loc = get_check_uniform(program, "proj_m4");
+	view_m4_loc = get_check_uniform(program, "view_m4");
+	model_m4_loc = get_check_uniform(program, "model_m4");
+
+	// Uniform locations in the fragment shader
+	has_tex_loc = get_check_uniform(program, "has_tex");
+	tex_loc = get_check_uniform(program, "tex");
+	tex_m3_loc = get_check_uniform(program, "tex_m3");
+
+	check_gl_error("Renderer::ctor#2"s);
 }
 
 Renderer::~Renderer() {
 	glDeleteProgram(program);
+}
+
+void Renderer::set_proj_view_matrices(const Camera &camera)
+{
+	glUniformMatrix4fv(view_m4_loc, 1, GL_FALSE, glm::value_ptr(camera.get_view_matrix()));
 }
 
 } // namespace Engine::N3D

@@ -51,8 +51,17 @@ inline void check_gl_error(const std::string& where)
 	}
 }
 
+// Loads the given Shader from source, and return its GL name
+// throws a runtime_exception on failure
 GLuint load_shader(const GLchar* source, GLenum type, GLint source_len);
+
+// Links all the given shaders into a program and return its GL name
+// throws a runtime_exception on failure
 GLuint load_program(std::initializer_list<GLuint> shaders);
+
+// Get the location of a named uniform in a program
+// throws a runtime_exception if not found
+GLint get_check_uniform(GLuint program, const GLchar* uniform_name);
 
 } // namespace Engine::N3D
 
