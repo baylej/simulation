@@ -24,39 +24,39 @@
 
 namespace Engine::N3D {
 
-static constexpr GLchar vert_shader_src[] {
+static constexpr GLchar vert_shader_src[] { // FIXME use modern C++ raw string literals
 "#version 300 es\n"
 
-"layout(location = 0) in vec3 vx_pos;" // Vertex
-"layout(location = 1) in vec3 vx_col;" // Color
-//"layout(location = 2) in vec2 vx_uv;"  // UV
+"layout(location = 0) in highp vec3 vx_pos;" // Vertex
+"layout(location = 1) in highp vec3 vx_col;" // Color
+"layout(location = 2) in vec2 vx_uv;"  // UV
 
-"uniform mat4 proj_m4;"
-"uniform mat4 view_m4;"
-"uniform mat4 model_m4;"
+"uniform highp mat4 proj_m4;"
+"uniform highp mat4 view_m4;"
+"uniform highp mat4 model_m4;"
 
-"out vec3 color;"
-//"out vec2 uv;"
+"out highp vec3 color;"
+"out highp vec2 uv;"
 
 "void main()"
 "{"
 "	gl_Position = proj_m4 * view_m4 * model_m4 * vec4(vx_pos, 1.0);"
 "	color = vx_col;"
-//"	uv = vx_uv;"
+"	uv = vx_uv;"
 "}"};
 constexpr GLint vert_shader_src_len = std::size(vert_shader_src);
 
-constexpr GLchar frag_shader_src[] {
+constexpr GLchar frag_shader_src[] { // FIXME use modern C++ raw string literals
 "#version 300 es\n"
 
-"out vec4 frag_colour;"
+"out highp vec4 frag_colour;"
 
-"in vec3 color;"
-"in vec2 uv;"
+"in highp vec3 color;"
+"in highp vec2 uv;"
 
 "uniform bool has_tex;"
 "uniform sampler2D tex;"
-"uniform mat3 tex_m3;"
+"uniform highp mat3 tex_m3;"
 
 "void main()"
 "{"/*
@@ -71,60 +71,6 @@ constexpr GLchar frag_shader_src[] {
 "}"};
 constexpr GLint frag_shader_src_len = std::size(frag_shader_src);
 
-constexpr GLsizei log_buf_size = 4096;
-
-GLuint load_shader(const GLchar* source, GLenum type, GLint source_len)
-{
-	GLuint shader = glCreateShader(type);
-	glShaderSource(shader, 1, &source, &source_len);
-	GLint compile_status = GL_FALSE;
-	glGetShaderiv(shader, GL_COMPILE_STATUS, &compile_status);
-	if (compile_status == GL_FALSE) {
-		GLchar log[log_buf_size];
-		GLsizei log_len = 0;
-		glGetShaderInfoLog(shader, log_buf_size, &log_len, static_cast<GLchar*>(log));
-		glDeleteShader(shader);
-		throw std::runtime_error("GL Error: Could not compile shader, "s + static_cast<char*>(log));
-	}
-	return shader;
-}
-
-// Create a program from all the supplied shaders
-GLuint load_program(std::initializer_list<GLuint> shaders)
-{
-	GLuint program = glCreateProgram();
-	for (GLuint it: shaders) {
-		glAttachShader(program, it);
-	}
-	glLinkProgram(program);
-
-	GLint link_status = GL_FALSE;
-	glGetProgramiv(program, GL_LINK_STATUS, &link_status);
-	GLint validate_status = GL_FALSE;
-	if (link_status == GL_TRUE) {
-		glValidateProgram(program);
-		glGetProgramiv(program, GL_VALIDATE_STATUS, &validate_status);
-	}
-
-	if (link_status == GL_FALSE || validate_status == GL_FALSE) {
-		GLchar log[log_buf_size];
-		GLsizei log_len = 0;
-		glGetProgramInfoLog(program, log_buf_size, &log_len, static_cast<GLchar*>(log));
-		glDeleteProgram(program);
-		throw std::runtime_error("GL Error: Could not link/validate program, "s + static_cast<char*>(log));
-	}
-	return program;
-}
-
-GLint get_check_uniform(GLuint program, const GLchar* uniform_name)
-{
-	GLint res = glGetUniformLocation(program, uniform_name);
-	if (res == -1) {
-		throw std::runtime_error("GL Error: uniform location not found: "s + uniform_name);
-	}
-	return res;
-}
-
 Renderer::Renderer()
 {
 	GLuint vert_shader = load_shader(static_cast<const GLchar*>(vert_shader_src), GL_VERTEX_SHADER, vert_shader_src_len);
@@ -133,10 +79,15 @@ Renderer::Renderer()
 	program = load_program({vert_shader, frag_shader});
 
 	// Flag shaders for deletion
+	glDetachShader(program, vert_shader);
+	glDetachShader(program, frag_shader);
 	glDeleteShader(vert_shader);
 	glDeleteShader(frag_shader);
 
 	check_gl_error("Renderer::ctor#1"s);
+
+	// If there is a uniform that you are not using, the driver will optimize your uniform out.
+	// Then `glGetUniformLocation` returns -1.
 
 	// Uniform locations in the vertex shader
 	proj_m4_loc = get_check_uniform(program, "proj_m4");
@@ -144,9 +95,9 @@ Renderer::Renderer()
 	model_m4_loc = get_check_uniform(program, "model_m4");
 
 	// Uniform locations in the fragment shader
-	has_tex_loc = get_check_uniform(program, "has_tex");
+	/*has_tex_loc = get_check_uniform(program, "has_tex");
 	tex_loc = get_check_uniform(program, "tex");
-	tex_m3_loc = get_check_uniform(program, "tex_m3");
+	tex_m3_loc = get_check_uniform(program, "tex_m3");*/
 
 	check_gl_error("Renderer::ctor#2"s);
 }
@@ -155,9 +106,15 @@ Renderer::~Renderer() {
 	glDeleteProgram(program);
 }
 
-void Renderer::set_proj_view_matrices(const Camera &camera)
+void Renderer::set_proj_view_matrices(const Camera &camera) const
 {
+	glUniformMatrix4fv(proj_m4_loc, 1, GL_FALSE, glm::value_ptr(camera.get_proj_matrix()));
 	glUniformMatrix4fv(view_m4_loc, 1, GL_FALSE, glm::value_ptr(camera.get_view_matrix()));
+}
+
+void Renderer::set_model_matrix(const glm::mat4 &model_m4) const
+{
+	glUniformMatrix4fv(model_m4_loc, 1, GL_FALSE, glm::value_ptr(model_m4));
 }
 
 } // namespace Engine::N3D

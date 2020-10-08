@@ -51,7 +51,7 @@ private:
 	GLuint vao = GL_NONE;
 };
 
-class Triangle: public Mesh {
+class Triangle : public Mesh {
 public:
 	Triangle();
 	~Triangle() = default;

@@ -12,9 +12,12 @@ add_executable(simulation
   src/main.cpp
 
   src/contexts/menu.cpp
+  src/contexts/scene_3d.cpp
 
+  src/3D/camera.cpp
   src/3D/renderer.cpp
   src/3D/mesh.cpp
+  src/3D/utils.cpp
 
   ${imgui_source})
 

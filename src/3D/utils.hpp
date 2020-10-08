@@ -44,7 +44,7 @@ inline void check_gl_error(const std::string& where)
 			case GL_INVALID_OPERATION:             msg << "operation not allowed"s;                break;
 			case GL_INVALID_FRAMEBUFFER_OPERATION: msg << "framebuffer operation not allowed"s;    break;
 			case GL_OUT_OF_MEMORY:                 msg << "OUT OF MEMORY"s;                        break; // this error is fatal to the GL state
-			default:                               msg << "unknown error : "s << error;
+			default:                               msg << "unknown error: "s << error;
 		}
 		msg << ", at " << where;
 		throw std::runtime_error(msg.str());
@@ -62,6 +62,9 @@ GLuint load_program(std::initializer_list<GLuint> shaders);
 // Get the location of a named uniform in a program
 // throws a runtime_exception if not found
 GLint get_check_uniform(GLuint program, const GLchar* uniform_name);
+
+// List uniform names on std::cerr, for debugging purposes
+void list_uniforms(GLuint program);
 
 } // namespace Engine::N3D
 

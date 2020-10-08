@@ -28,22 +28,29 @@ Mesh::Mesh(const vector<GLuint>& indices, const vector<GLfloat>& vertices, const
 	glBindVertexArray(vao);
 
 	glGenBuffers(1, &vertices_buf);
+	glEnableVertexAttribArray(Renderer::vertex_pos_attr_loc);
 	glBindBuffer(GL_ARRAY_BUFFER, vertices_buf);
 	glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(GLfloat), vertices.data(), GL_STATIC_DRAW);
 	glVertexAttribPointer(Renderer::vertex_pos_attr_loc, prim_component_number, GL_FLOAT, GL_FALSE, 0, nullptr);
 
 	glGenBuffers(1, &colours_buf);
+	glEnableVertexAttribArray(Renderer::vertex_col_attr_loc);
 	glBindBuffer(GL_ARRAY_BUFFER, colours_buf);
 	glBufferData(GL_ARRAY_BUFFER, colours.size() * sizeof(GLfloat), colours.data(), GL_STATIC_DRAW);
 	glVertexAttribPointer(Renderer::vertex_col_attr_loc, prim_component_number, GL_FLOAT, GL_FALSE, 0, nullptr);
 
 	/*glGenBuffers(1, &uvs_buf);
+	// TODO: glEnableVertexAttribArray
 	glBindBuffer(GL_ARRAY_BUFFER, uvs_buf);
-	glBufferData(GL_ARRAY_BUFFER, uvs.size() * sizeof(GLfloat), uvs.data(), GL_STATIC_DRAW);*/
+	glBufferData(GL_ARRAY_BUFFER, uvs.size() * sizeof(GLfloat), uvs.data(), GL_STATIC_DRAW);
+	// TODO: glVertexAttribPointer */
+
+	glBindBuffer(GL_ARRAY_BUFFER, GL_NONE);
 
 	glGenBuffers(1, &indices_buf);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indices_buf);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(GLuint), indices.data(), GL_STATIC_DRAW);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, GL_NONE);
 
 	glBindVertexArray(GL_NONE);
 
@@ -62,12 +69,14 @@ void Mesh::draw() const
 {
 	glBindVertexArray(vao);
 
-	//glBindBuffer(GL_ARRAY_BUFFER, vertices_buf); // FIXME: already bound in the constructor?
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indices_buf);
 	glDrawElements(prim_type, indices_size, GL_UNSIGNED_INT, nullptr);
 
 	glBindVertexArray(GL_NONE);
 
+#ifndef NDEBUG
 	check_gl_error("Mesh::draw"s);
+#endif
 }
 
 Triangle::Triangle():

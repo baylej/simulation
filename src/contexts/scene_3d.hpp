@@ -1,5 +1,5 @@
 /*
-    3D Physics Simulations - Menu context
+    3D Physics Simulations - Scene3d
     Copyright (C) 2020  Jonathan Bayle
 
     This program is free software: you can redistribute it and/or modify
@@ -17,27 +17,30 @@
 */
 #pragma once
 
-#ifndef SIMULATION_MENU_HPP
-#define SIMULATION_MENU_HPP
+#ifndef SIMULATION_SCENE_3D_HPP
+#define SIMULATION_SCENE_3D_HPP
 
-#include <memory>
 #include "../context.hpp"
 #include "../3D/renderer.hpp"
+#include "../3D/mesh.hpp"
+
+#include <memory>
 
 namespace Engine::Contexts {
 
-class Menu : public Context {
+class Scene3D : public Context {
 public:
-	Menu();
-	~Menu() final = default;
-	void loop_run(float delta_t) final;
+	Scene3D(N3D::Renderer& renderer, std::unique_ptr<N3D::Mesh> mesh);
+	~Scene3D() final = default;
 
+	void start() final;
+	void loop_run(float delta_t) final;
 private:
-	bool show_help = false;
-	std::unique_ptr<N3D::Renderer> renderer;
-	std::unique_ptr<Context> new_ctx;
+	N3D::Renderer& renderer;
+	N3D::Camera camera;
+	std::unique_ptr<N3D::Mesh> mesh;
 };
 
-} // namespace Engine::Contexts
+}
 
-#endif //SIMULATION_MENU_HPP
+#endif //SIMULATION_SCENE_3D_HPP

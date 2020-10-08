@@ -17,6 +17,8 @@
 */
 #include "menu.hpp"
 #include "../main.hpp"
+#include "scene_3d.hpp"
+#include "../3D/mesh.hpp"
 
 #include <imgui/imgui.h>
 
@@ -32,10 +34,11 @@ void Menu::loop_run(float delta_t)
 	if (ImGui::Button("Help")) {
 		show_help = !show_help;
 	}
-	if (ImGui::Button("Simulation 1")) {
-		// TODO
+	if (ImGui::Button("OpenGL triangle")) {
+		new_ctx = std::make_unique<Scene3D>(*renderer, std::move(std::make_unique<N3D::Triangle>()));
+		Context_holder::get().set_context(new_ctx.get());
 	}
-	if (ImGui::Button("Simulation 2")) {
+	/*if (ImGui::Button("Simulation 2")) {
 		// TODO
 	}
 	if (ImGui::Button("Simulation 3")) {
@@ -43,7 +46,7 @@ void Menu::loop_run(float delta_t)
 	}
 	if (ImGui::Button("Simulation 4")) {
 		// TODO
-	}
+	}*/
 
 #ifndef EMSCRIPTEN
 	if (ImGui::Button("Exit")) {
@@ -57,6 +60,11 @@ void Menu::loop_run(float delta_t)
 		// TODO
 
 	}
+}
+
+Menu::Menu()
+{
+	renderer = std::make_unique<N3D::Renderer>();
 }
 
 } // namespace Engine::Contexts

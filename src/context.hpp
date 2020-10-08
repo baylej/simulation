@@ -24,6 +24,8 @@ namespace Engine {
 
 class Context {
 public:
+	virtual ~Context() = default;
+
 	virtual void loop_run(float delta_t) = 0;
 	// Called when switching to this context
 	virtual void start() {};

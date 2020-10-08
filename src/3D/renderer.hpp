@@ -39,10 +39,11 @@ public:
 	constexpr static GLuint vertex_col_attr_loc = 1;
 
 	// glUseProgram this renderer's program
-	void use_program() { glUseProgram(program); };
+	void use_program() const { glUseProgram(program); };
 
 	// To use the following functions, this renderer's program must be in use
-	void set_proj_view_matrices(const Camera& camera);
+	void set_proj_view_matrices(const Camera& camera) const;
+	void set_model_matrix(const glm::mat4& model_m4) const;
 
 private:
 	GLuint program;

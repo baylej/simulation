@@ -1,5 +1,5 @@
 /*
-    3D Physics Simulations - Menu context
+    3D Physics Simulations - Scene3d
     Copyright (C) 2020  Jonathan Bayle
 
     This program is free software: you can redistribute it and/or modify
@@ -15,29 +15,33 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
-#pragma once
+#include "scene_3d.hpp"
+#include "../3D/utils.hpp"
 
-#ifndef SIMULATION_MENU_HPP
-#define SIMULATION_MENU_HPP
-
-#include <memory>
-#include "../context.hpp"
-#include "../3D/renderer.hpp"
+#include <glm/ext/matrix_transform.hpp>
 
 namespace Engine::Contexts {
 
-class Menu : public Context {
-public:
-	Menu();
-	~Menu() final = default;
-	void loop_run(float delta_t) final;
+void Scene3D::start()
+{
+	Context::start();
+}
 
-private:
-	bool show_help = false;
-	std::unique_ptr<N3D::Renderer> renderer;
-	std::unique_ptr<Context> new_ctx;
-};
+void Scene3D::loop_run(float delta_t)
+{
+	renderer.set_proj_view_matrices(camera);
+	renderer.set_model_matrix(glm::identity<glm::mat4>());
+	mesh->draw();
+#ifndef NDEBUG
+	N3D::check_gl_error("Scene3D::loop_run");
+#endif
+}
 
-} // namespace Engine::Contexts
+Scene3D::Scene3D(N3D::Renderer& renderer, std::unique_ptr<N3D::Mesh> mm):
+	renderer(renderer)
+{
+	mesh = std::move(mm);
+	renderer.use_program();
+}
 
-#endif //SIMULATION_MENU_HPP
+}
