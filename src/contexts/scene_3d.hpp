@@ -43,7 +43,7 @@ private:
 	const Renderer::Renderer& renderer;
 	const Renderer::Static_indexed_mesh& mesh;
 
-	Renderer::Camera camera;
+	Renderer::Camera2D camera;
 
 	// GUI elements
 	static constexpr const char* prim_type_names[] = { "GL_TRIANGLES", "GL_LINE_LOOP", "GL_POINTS" };

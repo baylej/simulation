@@ -30,7 +30,7 @@ namespace Engine {
 
 // Configuration & Defaults
 constexpr bool WANT_DEBUG_CTX = true;
-constexpr unsigned MSAA_SAMPLES = 2; // 0 to disable
+constexpr unsigned MSAA_SAMPLES = 4; // 0 to disable
 constexpr int WINDOW_HEIGHT = 720;
 constexpr int WINDOW_WIDTH = 1280;
 constexpr const char* WINDOW_TITLE = "Simulation";

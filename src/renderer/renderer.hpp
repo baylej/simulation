@@ -49,7 +49,7 @@ public:
 	void use_program() const { glUseProgram(program); };
 
 	// To use the following functions, this renderer's program must be in use
-	void set_proj_view_matrices(const Camera& camera) const;
+	void set_proj_view_matrices(const Camera2D& camera) const;
 	void set_model_matrix(const glm::mat4& model_m4) const;
 
 private:

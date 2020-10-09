@@ -26,8 +26,14 @@ namespace Engine::Renderer {
 
 class Camera {
 public:
-	Camera();
-	~Camera() = default;
+	[[nodiscard]] virtual const glm::mat4& get_proj_matrix() const = 0;
+	[[nodiscard]] virtual const glm::mat4& get_view_matrix() const = 0;
+};
+
+class Camera2D {
+public:
+	Camera2D();
+	~Camera2D() = default;
 
 	[[nodiscard]] const glm::mat4& get_proj_matrix() const
 	{
