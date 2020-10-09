@@ -19,7 +19,7 @@
 #include "error.hpp"
 #include "context.hpp"
 #include "contexts/menu.hpp"
-#include "3D/utils.hpp"
+#include "renderer/utils.hpp"
 
 // ImGui is included first in example programs
 #include <imgui/imgui.h>
@@ -112,7 +112,7 @@ void Main::main_loop()
 	ImGui::Render();
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
-	glFlush(); N3D::check_gl_error("glFlush");
+	glFlush(); Renderer::check_gl_error("glFlush");
 	glfwSwapBuffers(window);
 	glfwPollEvents();
 }

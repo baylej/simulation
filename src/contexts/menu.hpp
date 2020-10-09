@@ -22,7 +22,7 @@
 
 #include <memory>
 #include "../context.hpp"
-#include "../3D/renderer.hpp"
+#include "../renderer/renderer.hpp"
 
 namespace Engine::Contexts {
 
@@ -34,7 +34,7 @@ public:
 
 private:
 	bool show_help = false;
-	std::unique_ptr<N3D::Renderer> renderer;
+	std::unique_ptr<Renderer::Renderer> renderer;
 	std::unique_ptr<Context> new_ctx;
 };
 

@@ -28,7 +28,7 @@
 
 using std::literals::string_literals::operator""s;
 
-namespace Engine::N3D {
+namespace Engine::Renderer {
 
 // Checks whether an error occurred in the GL calls performed until now
 // throws a runtime_exception
@@ -53,7 +53,7 @@ inline void check_gl_error(const std::string& where)
 
 // Loads the given Shader from source, and return its GL name
 // throws a runtime_exception on failure
-GLuint load_shader(const GLchar* source, GLenum type, GLint source_len);
+GLuint load_shader(const GLchar* source, GLenum type);
 
 // Links all the given shaders into a program and return its GL name
 // throws a runtime_exception on failure

@@ -21,12 +21,12 @@
 
 constexpr GLsizei log_buf_size = 4096;
 
-namespace Engine::N3D {
+namespace Engine::Renderer {
 
-GLuint load_shader(const GLchar* source, GLenum type, GLint source_len)
+GLuint load_shader(const GLchar* source, GLenum type)
 {
 	GLuint shader = glCreateShader(type);
-	glShaderSource(shader, 1, &source, &source_len);
+	glShaderSource(shader, 1, &source, NULL);
 	glCompileShader(shader);
 	GLint compile_status = GL_FALSE;
 	glGetShaderiv(shader, GL_COMPILE_STATUS, &compile_status);

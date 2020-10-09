@@ -22,59 +22,58 @@
 
 #include <glm/gtc/type_ptr.hpp>
 
-namespace Engine::N3D {
+namespace Engine::Renderer {
 
-static constexpr GLchar vert_shader_src[] { // FIXME use modern C++ raw string literals
-"#version 300 es\n"
+static constexpr const GLchar* vert_shader_src = R"shader(
+#version 300 es
 
-"layout(location = 0) in highp vec3 vx_pos;" // Vertex
-"layout(location = 1) in highp vec3 vx_col;" // Color
-"layout(location = 2) in vec2 vx_uv;"  // UV
+layout(location = 0) in highp vec3 vx_pos; // Vertex
+layout(location = 1) in highp vec3 vx_col; // Color
+layout(location = 2) in vec2 vx_uv; // UV
 
-"uniform highp mat4 proj_m4;"
-"uniform highp mat4 view_m4;"
-"uniform highp mat4 model_m4;"
+uniform highp mat4 proj_m4;
+uniform highp mat4 view_m4;
+uniform highp mat4 model_m4;
 
-"out highp vec3 color;"
-"out highp vec2 uv;"
+out highp vec3 colour;
+out highp vec2 uv;
 
-"void main()"
-"{"
-"	gl_Position = proj_m4 * view_m4 * model_m4 * vec4(vx_pos, 1.0);"
-"	color = vx_col;"
-"	uv = vx_uv;"
-"}"};
-constexpr GLint vert_shader_src_len = std::size(vert_shader_src);
+void main()
+{
+	gl_Position = proj_m4 * view_m4 * model_m4 * vec4(vx_pos, 1.0);
+	colour = vx_col;
+	gl_PointSize = 5.;
+	uv = vx_uv;
+})shader";
 
-constexpr GLchar frag_shader_src[] { // FIXME use modern C++ raw string literals
-"#version 300 es\n"
+static constexpr const GLchar* frag_shader_src = R"shader(
+#version 300 es
 
-"out highp vec4 frag_colour;"
+out highp vec4 frag_colour;
 
-"in highp vec3 color;"
-"in highp vec2 uv;"
+in highp vec3 colour;
+in highp vec2 uv;
 
-"uniform bool has_tex;"
-"uniform sampler2D tex;"
-"uniform highp mat3 tex_m3;"
+uniform bool has_tex;
+uniform sampler2D tex;
+uniform highp mat3 tex_m3;
 
-"void main()"
-"{"/*
-"	if (has_tex) {"
-"		vec3 tex_coord = tex_m3 * vec3(uv, 1.);"
-"		frag_colour = texture2D(tex, tex_coord.st);"
-//	"		frag_colour = vec4(1., 0., 0., 1.0);" // DEBUG
-"	}"
-"	else {"*/
-"		frag_colour = vec4(color, 1.0);"
-//"	}"
-"}"};
-constexpr GLint frag_shader_src_len = std::size(frag_shader_src);
+void main()
+{/*
+	if (has_tex) {
+		vec3 tex_coord = tex_m3 * vec3(uv, 1.);
+		frag_colour = texture2D(tex, tex_coord.st);
+//		frag_colour = vec4(1., 0., 0., 1.0); // DEBUG
+	}
+	else {*/
+		frag_colour = vec4(colour, 1.0);
+//	}
+})shader";
 
 Renderer::Renderer()
 {
-	GLuint vert_shader = load_shader(static_cast<const GLchar*>(vert_shader_src), GL_VERTEX_SHADER, vert_shader_src_len);
-	GLuint frag_shader = load_shader(static_cast<const GLchar*>(frag_shader_src), GL_FRAGMENT_SHADER, frag_shader_src_len);
+	GLuint vert_shader = load_shader(static_cast<const GLchar*>(vert_shader_src), GL_VERTEX_SHADER);
+	GLuint frag_shader = load_shader(static_cast<const GLchar*>(frag_shader_src), GL_FRAGMENT_SHADER);
 
 	program = load_program({vert_shader, frag_shader});
 

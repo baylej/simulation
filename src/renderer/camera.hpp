@@ -22,7 +22,7 @@
 
 #include <glm/mat4x4.hpp>
 
-namespace Engine::N3D {
+namespace Engine::Renderer {
 
 class Camera {
 public:

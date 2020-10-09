@@ -19,7 +19,7 @@
 
 #include <glm/ext/matrix_transform.hpp>
 
-Engine::N3D::Camera::Camera()
+Engine::Renderer::Camera::Camera()
 {
 	// WIP using an ortho proj matrix for now
 	proj_matrix = glm::identity<glm::mat4>();

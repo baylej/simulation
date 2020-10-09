@@ -50,8 +50,8 @@ private:
 	~Context_holder() = default;
 	Context_holder(const Context_holder&) = delete;
 	Context_holder(Context_holder&&) = delete;
-	Context_holder& operator =(const Context_holder&) = delete;
-	Context_holder& operator =(Context_holder&&) = delete;
+	Context_holder &operator=(const Context_holder&) = delete;
+	Context_holder &operator=(Context_holder&&) = delete;
 
 	Context* current = nullptr;
 

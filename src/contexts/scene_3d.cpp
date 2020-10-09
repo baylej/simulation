@@ -16,7 +16,9 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 #include "scene_3d.hpp"
-#include "../3D/utils.hpp"
+#include "../renderer/utils.hpp"
+
+#include <imgui/imgui.h>
 
 #include <glm/ext/matrix_transform.hpp>
 
@@ -31,16 +33,22 @@ void Scene3D::loop_run(float delta_t)
 {
 	renderer.set_proj_view_matrices(camera);
 	renderer.set_model_matrix(glm::identity<glm::mat4>());
-	mesh->draw();
+	mesh.draw(prim_type_values[prim_type_selected]);
 #ifndef NDEBUG
-	N3D::check_gl_error("Scene3D::loop_run");
+	Renderer::check_gl_error("Scene3D::loop_run");
 #endif
+	ImGui::SetNextWindowPos({0, 0}); // Top-Left corner
+	ImGui::Begin("Options", nullptr, 0);
+
+	ImGui::Combo("Primitive type", &prim_type_selected, prim_type_names, IM_ARRAYSIZE(prim_type_names), IM_ARRAYSIZE(prim_type_names));
+
+	ImGui::End();
 }
 
-Scene3D::Scene3D(N3D::Renderer& renderer, std::unique_ptr<N3D::Mesh> mm):
-	renderer(renderer)
+Scene3D::Scene3D(const Renderer::Renderer& renderer, const Renderer::Static_indexed_mesh& mm):
+	renderer(renderer),
+	mesh(mm)
 {
-	mesh = std::move(mm);
 	renderer.use_program();
 }
 

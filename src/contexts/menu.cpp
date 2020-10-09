@@ -18,7 +18,6 @@
 #include "menu.hpp"
 #include "../main.hpp"
 #include "scene_3d.hpp"
-#include "../3D/mesh.hpp"
 
 #include <imgui/imgui.h>
 
@@ -35,7 +34,7 @@ void Menu::loop_run(float delta_t)
 		show_help = !show_help;
 	}
 	if (ImGui::Button("OpenGL triangle")) {
-		new_ctx = std::make_unique<Scene3D>(*renderer, std::move(std::make_unique<N3D::Triangle>()));
+		new_ctx = std::make_unique<Scene3D>(*renderer, Renderer::Triangle::get());
 		Context_holder::get().set_context(new_ctx.get());
 	}
 	/*if (ImGui::Button("Simulation 2")) {
@@ -64,7 +63,7 @@ void Menu::loop_run(float delta_t)
 
 Menu::Menu()
 {
-	renderer = std::make_unique<N3D::Renderer>();
+	renderer = std::make_unique<Renderer::Renderer>();
 }
 
 } // namespace Engine::Contexts

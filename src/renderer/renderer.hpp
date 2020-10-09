@@ -24,19 +24,26 @@
 
 #include "camera.hpp"
 
-namespace Engine::N3D {
+namespace Engine::Renderer {
 
 class Renderer {
 public:
-	// Compiles shaders, link program, use program
+	// Compiles shaders, link program
 	Renderer();
+	// Deletes the program (hence this object is movable but not copyable)
 	~Renderer();
+
+	// Not copyable, not copy assignable
+	// Movable, move assignable
 	Renderer(const Renderer &) = delete;
 	Renderer(Renderer &&) = default;
+	Renderer& operator=(const Renderer&) = delete;
+	Renderer& operator=(Renderer&&) = default;
 
 	// Location of vertex attributes defined in the vertex shader
 	constexpr static GLuint vertex_pos_attr_loc = 0;
 	constexpr static GLuint vertex_col_attr_loc = 1;
+	constexpr static GLuint vertex_uv_attr_loc  = 2;
 
 	// glUseProgram this renderer's program
 	void use_program() const { glUseProgram(program); };

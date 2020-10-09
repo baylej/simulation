@@ -21,8 +21,8 @@
 #define SIMULATION_SCENE_3D_HPP
 
 #include "../context.hpp"
-#include "../3D/renderer.hpp"
-#include "../3D/mesh.hpp"
+#include "../renderer/renderer.hpp"
+#include "../renderer/mesh.hpp"
 
 #include <memory>
 
@@ -30,15 +30,25 @@ namespace Engine::Contexts {
 
 class Scene3D : public Context {
 public:
-	Scene3D(N3D::Renderer& renderer, std::unique_ptr<N3D::Mesh> mesh);
-	~Scene3D() final = default;
+	Scene3D(const Renderer::Renderer& renderer, const Renderer::Static_indexed_mesh& mesh);
+	~Scene3D() override = default;
+	Scene3D(const Scene3D&) = default;
+	Scene3D(Scene3D&&) = default;
+	Scene3D& operator=(const Scene3D&) = delete;
+	Scene3D& operator=(Scene3D&&) = delete;
 
 	void start() final;
 	void loop_run(float delta_t) final;
 private:
-	N3D::Renderer& renderer;
-	N3D::Camera camera;
-	std::unique_ptr<N3D::Mesh> mesh;
+	const Renderer::Renderer& renderer;
+	const Renderer::Static_indexed_mesh& mesh;
+
+	Renderer::Camera camera;
+
+	// GUI elements
+	static constexpr const char* prim_type_names[] = { "GL_TRIANGLES", "GL_LINE_LOOP", "GL_POINTS" };
+	static constexpr const GLenum prim_type_values[] = { GL_TRIANGLES, GL_LINE_LOOP, GL_POINTS };
+	int prim_type_selected = 0;
 };
 
 }
