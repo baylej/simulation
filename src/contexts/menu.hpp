@@ -26,7 +26,7 @@
 
 namespace Engine::Contexts {
 
-class Menu : public Context {
+class Menu final : public Context {
 public:
 	Menu();
 	~Menu() final = default;

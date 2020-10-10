@@ -36,7 +36,7 @@ constexpr int WINDOW_WIDTH = 1280;
 constexpr const char* WINDOW_TITLE = "Simulation";
 constexpr bool ALLOW_RESIZING = true;
 
-class Main {
+class Main final {
 public:
 	void init(); // Call once at the very beginning
 	void main_loop(); // you're probably looking for `run_main_loop()`

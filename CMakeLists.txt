@@ -34,7 +34,12 @@ endif()
 if(EMSCRIPTEN)
   target_compile_definitions(simulation PRIVATE EMSCRIPTEN)
   set_target_properties(simulation PROPERTIES SUFFIX ".html")
-  target_link_options(simulation PRIVATE "SHELL:-s USE_GLFW=3 -s FULL_ES3=1")
+  target_link_options(simulation PRIVATE "SHELL:-s USE_GLFW=3 -s FULL_ES3=1 -s MAX_WEBGL_VERSION=2")
+  if (CMAKE_BUILD_TYPE STREQUAL "Debug")
+    # EXCEPTION_DEBUG=1 prints a stacktrace on exception catching
+    target_compile_options(simulation PRIVATE "SHELL:-s EXCEPTION_DEBUG=1 -s DISABLE_EXCEPTION_CATCHING=0 -s DEMANGLE_SUPPORT=1")
+    target_link_options(simulation PRIVATE "SHELL:-s EXCEPTION_DEBUG=1 -s DISABLE_EXCEPTION_CATCHING=0 -s DEMANGLE_SUPPORT=1")
+  endif()
   # GLFW is provided by emscripten
   #target_link_options(simulation PRIVATE --preload-file data)
 else()

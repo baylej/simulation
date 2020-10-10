@@ -159,7 +159,7 @@ int main(void)
 		main.init();
 		main.run_main_loop();
 	}
-	catch (const std::exception &ex) {
+	catch (const std::exception& ex) {
 		cerr << ex.what() << endl;
 	}
 	main.cleanup();

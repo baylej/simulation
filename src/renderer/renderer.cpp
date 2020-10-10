@@ -24,8 +24,8 @@
 
 namespace Engine::Renderer {
 
-static constexpr const GLchar* vert_shader_src = R"shader(
-#version 300 es
+static constexpr const GLchar* vert_shader_src =
+R"shader(#version 300 es
 
 layout(location = 0) in highp vec3 vx_pos; // Vertex
 layout(location = 1) in highp vec3 vx_col; // Color
@@ -46,8 +46,8 @@ void main()
 	uv = vx_uv;
 })shader";
 
-static constexpr const GLchar* frag_shader_src = R"shader(
-#version 300 es
+static constexpr const GLchar* frag_shader_src =
+R"shader(#version 300 es
 
 out highp vec4 frag_colour;
 
