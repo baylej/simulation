@@ -19,10 +19,19 @@
 
 #include <glm/ext/matrix_transform.hpp>
 
-Engine::Renderer::Camera2D::Camera2D()
+using namespace glm;
+
+namespace Engine::Renderer {
+Camera2D::Camera2D(unsigned int display_height, unsigned int display_width)
 {
-	// WIP using an ortho proj matrix for now
-	proj_matrix = glm::identity<glm::mat4>();
-	proj_matrix[2].z = 0.f;
-	view_matrix = glm::identity<glm::mat4>();
+	update_display_dimensions(display_height, display_width);
 }
+
+void Camera2D::update_display_dimensions(unsigned int display_height, unsigned int display_width)
+{
+	proj_matrix = mat4(1.f);
+	proj_matrix[2].z = 0.f;
+	view_matrix = scale(translate(mat4(1.f), vec3(-1, -1, 0)), vec3(2/static_cast<float>(display_width), 2/static_cast<float>(display_height), 1));
+}
+
+} // namespace Engine::Renderer

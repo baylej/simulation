@@ -17,6 +17,7 @@
 */
 #include "scene_3d.hpp"
 #include "../renderer/utils.hpp"
+#include "../main.hpp"
 
 #include <imgui/imgui.h>
 
@@ -32,7 +33,7 @@ void Scene3D::start()
 void Scene3D::loop_run(float delta_t)
 {
 	renderer.set_proj_view_matrices(camera);
-	renderer.set_model_matrix(glm::identity<glm::mat4>());
+	renderer.set_model_matrix(model_m4);
 	mesh.draw(prim_type_values[prim_type_selected]);
 #ifndef NDEBUG
 	Renderer::check_gl_error("Scene3D::loop_run");
@@ -47,9 +48,11 @@ void Scene3D::loop_run(float delta_t)
 
 Scene3D::Scene3D(const Renderer::Renderer& renderer, const Renderer::Static_indexed_mesh& mm):
 	renderer(renderer),
-	mesh(mm)
+	mesh(mm),
+	camera(Main::get()->display_height, Main::get()->display_width)
 {
 	renderer.use_program();
+	model_m4 = glm::scale(glm::translate(glm::mat4(1.f), glm::vec3(Main::get()->display_width / 2.f, Main::get()->display_height/2.f, 0)), glm::vec3(200, 200, 1));
 }
 
 }

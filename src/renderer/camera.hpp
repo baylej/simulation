@@ -30,17 +30,24 @@ public:
 	[[nodiscard]] virtual const glm::mat4& get_view_matrix() const = 0;
 };
 
-class Camera2D {
+// 2D camera, translates absolute screen coordinates in pixel (Origin is bottom-left) to OpenGL screen coordinates (-1,+1)
+class Camera2D: public Camera {
 public:
-	Camera2D();
+	Camera2D(unsigned int display_height, unsigned int display_width);
 	~Camera2D() = default;
+	Camera2D(const Camera2D&) = default;
+	Camera2D(Camera2D&&) = delete; // Due to Observer
+	Camera2D& operator=(const Camera2D&) = default;
+	Camera2D& operator=(Camera2D&&) = default; // Due to Observer
 
-	[[nodiscard]] const glm::mat4& get_proj_matrix() const
+	void update_display_dimensions(unsigned int display_height, unsigned int display_width);
+
+	[[nodiscard]] const glm::mat4& get_proj_matrix() const override
 	{
 		return proj_matrix;
 	}
 
-	[[nodiscard]] const glm::mat4& get_view_matrix() const
+	[[nodiscard]] const glm::mat4& get_view_matrix() const override
 	{
 		return view_matrix;
 	}
