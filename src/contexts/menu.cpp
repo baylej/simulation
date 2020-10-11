@@ -23,7 +23,7 @@
 
 namespace Engine::Contexts {
 
-void Menu::loop_run(float delta_t)
+void Menu::loop_run([[maybe_unused]] float delta_t)
 {
 	Main* main = Main::get();
 	ImGui::SetNextWindowPos(ImVec2{main->display_width / 2.f, main->display_height / 2.f}, 0, ImVec2{.5f, .5f});

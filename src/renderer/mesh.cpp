@@ -34,12 +34,12 @@ GLuint generateArray(bool generate = true)
 }
 
 Static_indexed_mesh::Static_indexed_mesh(const vector<GLuint>& indices, const vector<GLfloat>& vertices, const vector<GLfloat>& colours, const vector<GLfloat>& uvs):
-		vao(generateArray<glGenVertexArrays>()),
+		indices_size(indices.size()),
 		indices_buf(generateArray<glGenBuffers>()),
 		vertices_buf(generateArray<glGenBuffers>()),
 		colours_buf(generateArray<glGenBuffers>(!colours.empty())),
 		uvs_buf(generateArray<glGenBuffers>(!uvs.empty())),
-		indices_size(indices.size())
+		vao(generateArray<glGenVertexArrays>())
 {
 	glBindVertexArray(vao);
 

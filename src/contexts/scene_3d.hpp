@@ -32,8 +32,8 @@ class Scene3D : public Context {
 public:
 	Scene3D(const Renderer::Renderer& renderer, const Renderer::Static_indexed_mesh& mesh);
 	~Scene3D() override = default;
-	Scene3D(const Scene3D&) = default;
-	Scene3D(Scene3D&&) = default;
+	Scene3D(const Scene3D&) = delete;
+	Scene3D(Scene3D&&) = delete;
 	Scene3D& operator=(const Scene3D&) = delete;
 	Scene3D& operator=(Scene3D&&) = delete;
 

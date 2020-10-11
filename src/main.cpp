@@ -72,7 +72,7 @@ void Main::init()
 	// TODO install user defined input callbacks here before initialising DearImGui !!
 	//glfwSetKeyCallback(window, [](GLFWwindow* window, int key, int scancode, int action, int modifiers) { });
 	//glfwSetMouseButtonCallback(window, [](GLFWwindow* window, int button, int action, int modifiers) {});
-	glfwSetWindowSizeCallback(window, [](GLFWwindow* window, int w, int h) {
+	glfwSetWindowSizeCallback(window, []([[maybe_unused]] GLFWwindow* window, int w, int h) {
 		glViewport(0, 0, w, h);
 		Main::get()->display_height = h;
 		Main::get()->display_width = w;
@@ -81,9 +81,9 @@ void Main::init()
 	// ImGui init: create a dear imgui context, setup some options, load fonts
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
-	ImGuiIO &io = ImGui::GetIO();
 	ImGui::StyleColorsDark();
 	// TODO: Set optional io.ConfigFlags values.
+	//   ImGuiIO &io = ImGui::GetIO();
 	//   e.g. 'io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard' to enable keyboard controls.
 	// TODO: Fill optional fields of the io structure later.
 	ImGui_ImplGlfw_InitForOpenGL(window, true);

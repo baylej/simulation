@@ -34,4 +34,10 @@ void Camera2D::update_display_dimensions(unsigned int display_height, unsigned i
 	view_matrix = scale(translate(mat4(1.f), vec3(-1, -1, 0)), vec3(2/static_cast<float>(display_width), 2/static_cast<float>(display_height), 1));
 }
 
+Camera3D::Camera3D()
+{
+	position = glm::vec3(0.f);
+	sight = glm::vec3(0.f);
+}
+
 } // namespace Engine::Renderer

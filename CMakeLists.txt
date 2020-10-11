@@ -21,7 +21,9 @@ add_executable(simulation
 
   ${imgui_source})
 
-target_include_directories(simulation PRIVATE deps)
+target_include_directories(simulation SYSTEM PRIVATE deps)
+
+target_compile_options(simulation PRIVATE "-Wall" PRIVATE "-Wextra")
 
 target_compile_definitions(simulation
   PRIVATE IMGUI_IMPL_OPENGL_ES3
@@ -50,3 +52,4 @@ else()
 endif()
 
 set_target_properties(simulation PROPERTIES CXX_STANDARD 17 CXX_STANDARD_REQUIRED On)
+target_compile_features(simulation PRIVATE cxx_std_17)

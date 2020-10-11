@@ -57,6 +57,19 @@ private:
 	glm::mat4 view_matrix;
 };
 
+class Camera3D: public Camera {
+public:
+	Camera3D();
+	~Camera3D() = default;
+	Camera3D(const Camera3D&) = default;
+	Camera3D(Camera3D&&) = delete;
+	Camera3D& operator=(const Camera3D&) = default;
+	Camera3D& operator=(Camera3D&&) = delete;
+private:
+	glm::vec3 position;
+	glm::vec3 sight;
+};
+
 } // namespace Engine::N3D
 
 #endif //SIMULATION_CAMERA_HPP

@@ -30,7 +30,7 @@ void Scene3D::start()
 	Context::start();
 }
 
-void Scene3D::loop_run(float delta_t)
+void Scene3D::loop_run([[maybe_unused]] float delta_t)
 {
 	renderer.set_proj_view_matrices(camera);
 	renderer.set_model_matrix(model_m4);
