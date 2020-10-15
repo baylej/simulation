@@ -34,6 +34,7 @@ void Scene3D::loop_run([[maybe_unused]] float delta_t)
 {
 	renderer.set_proj_view_matrices(camera);
 	renderer.set_model_matrix(model_m4);
+	renderer.set_has_texture(false);
 	mesh.draw(prim_type_values[prim_type_selected]);
 #ifndef NDEBUG
 	Renderer::check_gl_error("Scene3D::loop_run");

@@ -59,15 +59,15 @@ uniform sampler2D tex;
 uniform highp mat3 tex_m3;
 
 void main()
-{/*
+{
 	if (has_tex) {
-		vec3 tex_coord = tex_m3 * vec3(uv, 1.);
+		highp vec3 tex_coord = tex_m3 * vec3(uv, 1.);
 		frag_colour = texture2D(tex, tex_coord.st);
 //		frag_colour = vec4(1., 0., 0., 1.0); // DEBUG
 	}
-	else {*/
+	else {
 		frag_colour = vec4(colour, 1.0);
-//	}
+	}
 })shader";
 
 Renderer::Renderer()
@@ -94,9 +94,9 @@ Renderer::Renderer()
 	model_m4_loc = get_check_uniform(program, "model_m4");
 
 	// Uniform locations in the fragment shader
-	/*has_tex_loc = get_check_uniform(program, "has_tex");
+	has_tex_loc = get_check_uniform(program, "has_tex");
 	tex_loc = get_check_uniform(program, "tex");
-	tex_m3_loc = get_check_uniform(program, "tex_m3");*/
+	tex_m3_loc = get_check_uniform(program, "tex_m3");
 
 	check_gl_error("Renderer::ctor#2"s);
 }
@@ -114,6 +114,16 @@ void Renderer::set_proj_view_matrices(const Camera2D &camera) const
 void Renderer::set_model_matrix(const glm::mat4 &model_m4) const
 {
 	glUniformMatrix4fv(model_m4_loc, 1, GL_FALSE, glm::value_ptr(model_m4));
+}
+
+void Renderer::set_has_texture(bool has_tex) const
+{
+	glUniform1i(has_tex_loc, has_tex ? GL_TRUE : GL_FALSE);
+}
+
+void Renderer::set_texture_matrix(const glm::mat3& tex_m3) const
+{
+	glUniformMatrix3fv(tex_m3_loc, 1, GL_FALSE, glm::value_ptr(tex_m3));
 }
 
 } // namespace Engine::N3D

@@ -99,10 +99,20 @@ Triangle::Triangle():
 		Static_indexed_mesh({0, 1, 2}, {0, .5, 0, .5, -.5, 0, -.5, -.5, 0}, {1, 0, 0, 0, 1, 0, 0, 0, 1}, {})
 {}
 
-const Triangle &Triangle::get()
+const Triangle& Triangle::get()
 {
 	static Triangle instance;
 	return instance;
+}
+
+Plane::Plane():
+		Static_indexed_mesh({0, 1, 2, 3}, {-1, -1, 0, -1, 1, 0, 1, 1, 0, 1, -1, 0}, {1, 1, 1, 1, 0, 0, 0, 1, 0, 0, 0, 1}, {0, 0, 0, 1, 1, 1, 1, 0})
+{}
+
+const Plane& Plane::get()
+{
+	static Plane plane;
+	return plane;
 }
 
 }

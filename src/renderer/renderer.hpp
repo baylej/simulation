@@ -44,13 +44,16 @@ public:
 	constexpr static GLuint vertex_pos_attr_loc = 0;
 	constexpr static GLuint vertex_col_attr_loc = 1;
 	constexpr static GLuint vertex_uv_attr_loc  = 2;
+	constexpr static GLuint texture_unit_name = 0; // GL_TEXTURE0 + 0 is bound
 
 	// glUseProgram this renderer's program
-	void use_program() const { glUseProgram(program); };
+	void use_program() const { glUseProgram(program); glUniform1i(tex_loc, texture_unit_name); };
 
 	// To use the following functions, this renderer's program must be in use
 	void set_proj_view_matrices(const Camera2D& camera) const;
 	void set_model_matrix(const glm::mat4& model_m4) const;
+	void set_has_texture(bool has_tex) const;
+	void set_texture_matrix(const glm::mat3& tex_m3) const;
 
 private:
 	GLuint program;

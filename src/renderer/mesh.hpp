@@ -78,6 +78,21 @@ private:
 	~Triangle() = default;
 };
 
+class Plane : public Static_indexed_mesh {
+public:
+	Plane(const Plane&) = delete;
+	Plane(Plane&&) = delete;
+	Plane &operator=(const Plane&) = delete;
+	Plane &operator=(Plane&&) = delete;
+
+	// Lazy initialised singleton
+	static const Plane& get();
+
+private:
+	Plane();
+	~Plane() = default;
+};
+
 }
 
 #endif //SIMULATION_MESH_HPP
