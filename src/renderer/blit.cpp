@@ -33,7 +33,7 @@ void Blitter::blit(GLuint tex_name,
 {
 	//glActiveTexture(GL_TEXTURE0 + Renderer::texture_unit_name);
 	//glBindTexture(GL_TEXTURE_2D, tex_name);
-	renderer.set_model_matrix(glm::scale(glm::translate(glm::mat4(1.), glm::vec3(dst_x, dst_y, 0)), glm::vec3(dst_w/2., dst_h/2., 0)));
+	renderer.set_model_matrix(glm::scale(glm::translate(glm::mat4(1.), glm::vec3(dst_x + dst_w/2., dst_y + dst_h/2., 0)), glm::vec3(dst_w/2., dst_h/2., 0)));
 	renderer.set_has_texture(false);
 	renderer.set_texture_matrix(glm::scale(glm::translate(glm::mat4(1.), glm::vec3(src_x, src_y, 0)), glm::vec3(src_w/2., src_h/2., 0)));
 
