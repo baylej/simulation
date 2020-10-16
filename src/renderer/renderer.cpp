@@ -62,7 +62,7 @@ void main()
 {
 	if (has_tex) {
 		highp vec3 tex_coord = tex_m3 * vec3(uv, 1.);
-		frag_colour = texture2D(tex, tex_coord.st);
+		frag_colour = texture(tex, tex_coord.st);
 //		frag_colour = vec4(1., 0., 0., 1.0); // DEBUG
 	}
 	else {

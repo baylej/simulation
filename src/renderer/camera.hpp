@@ -36,9 +36,9 @@ public:
 	Camera2D(unsigned int display_height, unsigned int display_width);
 	~Camera2D() = default;
 	Camera2D(const Camera2D&) = default;
-	Camera2D(Camera2D&&) = delete; // Due to Observer
+	Camera2D(Camera2D&&) = default;
 	Camera2D& operator=(const Camera2D&) = default;
-	Camera2D& operator=(Camera2D&&) = default; // Due to Observer
+	Camera2D& operator=(Camera2D&&) = default;
 
 	void update_display_dimensions(unsigned int display_height, unsigned int display_width);
 
@@ -62,9 +62,9 @@ public:
 	Camera3D();
 	~Camera3D() = default;
 	Camera3D(const Camera3D&) = default;
-	Camera3D(Camera3D&&) = delete;
+	Camera3D(Camera3D&&) = default;
 	Camera3D& operator=(const Camera3D&) = default;
-	Camera3D& operator=(Camera3D&&) = delete;
+	Camera3D& operator=(Camera3D&&) = default;
 private:
 	glm::vec3 position;
 	glm::vec3 sight;

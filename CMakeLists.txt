@@ -12,13 +12,15 @@ add_executable(simulation
   src/main.cpp
 
   src/contexts/menu.cpp
+  src/contexts/scene_2d.cpp
   src/contexts/scene_3d.cpp
 
-  src/renderer/camera.cpp
-  src/renderer/renderer.cpp
-  src/renderer/mesh.cpp
-  src/renderer/utils.cpp
   src/renderer/blit.cpp
+  src/renderer/camera.cpp
+  src/renderer/mesh.cpp
+  src/renderer/renderer.cpp
+  src/renderer/texture.cpp
+  src/renderer/utils.cpp
 
   ${imgui_source}
   deps/stb_image.c)

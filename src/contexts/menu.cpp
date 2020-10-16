@@ -18,6 +18,7 @@
 #include "menu.hpp"
 #include "../main.hpp"
 #include "scene_3d.hpp"
+#include "scene_2d.hpp"
 
 #include <imgui/imgui.h>
 
@@ -37,10 +38,11 @@ void Menu::loop_run([[maybe_unused]] float delta_t)
 		new_ctx = std::make_unique<Scene3D>(*renderer, Renderer::Triangle::get());
 		Context_holder::get().set_context(new_ctx.get());
 	}
-	/*if (ImGui::Button("Simulation 2")) {
-		// TODO
+	if (ImGui::Button("OpenGL plane")) {
+		new_ctx = std::make_unique<Scene2D>(*renderer);
+		Context_holder::get().set_context(new_ctx.get());
 	}
-	if (ImGui::Button("Simulation 3")) {
+	/*if (ImGui::Button("Simulation 3")) {
 		// TODO
 	}
 	if (ImGui::Button("Simulation 4")) {
