@@ -27,15 +27,15 @@ Blitter::Blitter(const Renderer& renderer, const Plane& plane) :
 		renderer(renderer), plane(plane)
 {}
 
-void Blitter::blit(GLuint tex_name,
+void Blitter::blit(const Texture& tex,
 		float src_x, float src_y, float src_w, float src_h,
 		float dst_x, float dst_y, float dst_w, float dst_h) const
 {
-	//glActiveTexture(GL_TEXTURE0 + Renderer::texture_unit_name);
-	//glBindTexture(GL_TEXTURE_2D, tex_name);
+	glActiveTexture(GL_TEXTURE0 + Renderer::texture_unit_name);
+	glBindTexture(GL_TEXTURE_2D, tex.get_texture_name());
 	renderer.set_model_matrix(glm::scale(glm::translate(glm::mat4(1.), glm::vec3(dst_x + dst_w/2., dst_y + dst_h/2., 0)), glm::vec3(dst_w/2., dst_h/2., 0)));
-	renderer.set_has_texture(false);
-	renderer.set_texture_matrix(glm::scale(glm::translate(glm::mat4(1.), glm::vec3(src_x, src_y, 0)), glm::vec3(src_w/2., src_h/2., 0)));
+	renderer.set_has_texture(true);
+	renderer.set_texture_matrix(glm::scale(glm::translate(glm::mat4(1.), glm::vec3(src_x / tex.get_width(), src_y / tex.get_height(), 0)), glm::vec3(src_w / tex.get_width(), src_h / tex.get_height(), 0)));
 
 	plane.draw();
 }

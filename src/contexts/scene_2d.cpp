@@ -21,7 +21,9 @@
 namespace Engine::Contexts {
 
 Scene2D::Scene2D(const Renderer::Renderer& renderer):
-		renderer(renderer), camera(Main::get()->display_height, Main::get()->display_width), blitter(renderer, Renderer::Plane::get())
+		renderer(renderer), camera(Main::get()->display_height, Main::get()->display_width), blitter(renderer, Renderer::Plane::get()),
+		//texture(Renderer::Image("data/debug_tex.png"))
+		texture(Renderer::bw_checker)
 {
 	renderer.use_program();
 }
@@ -29,7 +31,8 @@ Scene2D::Scene2D(const Renderer::Renderer& renderer):
 void Scene2D::loop_run([[maybe_unused]] float delta_t)
 {
 	renderer.set_proj_view_matrices(camera);
-	blitter.blit(0,0, 0, 0, 0, 100, 100, 100, 100);
+	blitter.blit(texture,0, 0, texture.get_width()*6, texture.get_height()*3, 0, 0, 1280/2., 720/2.);
+	blitter.blit(texture,0, 0, texture.get_width(), texture.get_height(), 1280/2., 720/2., 1280/2., 720/2.);
 }
 
 void Scene2D::start()

@@ -23,6 +23,7 @@
 #include "../context.hpp"
 #include "../renderer/renderer.hpp"
 #include "../renderer/blit.hpp"
+#include "../renderer/texture.hpp"
 
 namespace Engine::Contexts {
 
@@ -36,6 +37,7 @@ private:
 	const Renderer::Renderer& renderer;
 	Renderer::Camera2D camera;
 	Renderer::Blitter blitter;
+	Renderer::Texture texture;
 };
 
 } // namespace Engine::Contexts

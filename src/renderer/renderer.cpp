@@ -63,7 +63,8 @@ void main()
 	if (has_tex) {
 		highp vec3 tex_coord = tex_m3 * vec3(uv, 1.);
 		frag_colour = texture(tex, tex_coord.st);
-//		frag_colour = vec4(1., 0., 0., 1.0); // DEBUG
+		// DEBUG to see UV values as RG colors (texture lookup because the shader compiler optimisation removes unused uniforms)
+//		frag_colour = vec4(tex_coord.st, 0., texture(tex, tex_coord.st).a);
 	}
 	else {
 		frag_colour = vec4(colour, 1.0);

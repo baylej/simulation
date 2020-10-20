@@ -22,6 +22,7 @@
 
 #include "renderer.hpp"
 #include "mesh.hpp"
+#include "texture.hpp"
 
 namespace Engine::Renderer {
 
@@ -36,7 +37,7 @@ public:
 	Blitter& operator=(Blitter&&) = delete;
 
 	// Use screen coordinates in pixels absolute (see Camera2D)
-	void blit(GLuint tex_name,
+	void blit(const Texture& tex,
 	       float src_x, float src_y, float src_w, float src_h,
 	       float dst_x, float dst_y, float dst_w, float dst_h) const; // TODO: add rotation and blend colour
 

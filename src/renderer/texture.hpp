@@ -28,7 +28,7 @@ class Image {
 public:
 	// ctor
 	Image(const std::string& filename);
-	Image(int width, int height, int channels, unsigned char* raster);
+	Image(int width, int height, int channels, unsigned char* raster, int row_align = 1, void (*del)(unsigned char*) = nullptr);
 
 	// move
 	Image(Image&& other) noexcept { *this = std::move(other); };
@@ -45,17 +45,22 @@ public:
 	[[nodiscard]] int get_height() const { return height; }
 	[[nodiscard]] int get_channels() const { return channels; }
 	[[nodiscard]] const unsigned char* get_raster() const { return raster; }
+	[[nodiscard]] int get_row_align() const { return row_align; }
 
 private:
 	int width, height;
 	int channels; // number of components (1=Gs 2=GsA 3=RGB 4=RGBA)
 	unsigned char* raster; // managed resource
+	int row_align; // per row memory alignment (see glPixelStorei and GL_UNPACK_ALIGNMENT)
+	void (*deleter)(unsigned char*); // to free raster
 };
+
+extern const Image bw_checker;
 
 class Texture {
 public:
 	// Create a Texture from an Image (Copies the image into the VRAM, then the client side image can safely be destructed)
-	Texture(const Image& image);
+	Texture(const Image& image, GLenum filtering = GL_NEAREST, GLenum wrapping = GL_REPEAT);
 
 	// move
 	Texture(Texture&& other) noexcept { *this = std::move(other); }

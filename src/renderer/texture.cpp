@@ -17,37 +17,41 @@
 */
 #include "texture.hpp"
 
-#include <cassert>
 #include <stb_image.h>
 
 namespace Engine::Renderer {
 
 Image::Image(const std::string& filename):
-		width(0), height(0), channels(0), raster(nullptr)
+		width(0), height(0), channels(0), raster(nullptr), row_align(1), deleter(reinterpret_cast<void (*)(unsigned char*)>(stbi_image_free))
 {
 	raster = stbi_load(filename.data(), &width, &height, &channels, 0);
 	if (raster == nullptr) {
-		throw std::runtime_error("Could not stbi_load file " + filename);
+		throw std::runtime_error("Image::ctor: Could not stbi_load file " + filename);
 	}
 }
 
-Image::Image(int width, int height, int channels, unsigned char* raster):
-		width(width), height(height), channels(channels), raster(raster)
+Image::Image(int width, int height, int channels, unsigned char* raster, int row_align, void (*del)(unsigned char*)):
+		width(width), height(height), channels(channels), raster(raster), row_align(row_align), deleter(del)
 {
-	assert(raster != nullptr);
+	if (row_align != 1 &&
+	    row_align != 2 &&
+	    row_align != 4 &&
+	    row_align != 8) {
+		throw std::runtime_error("Image::ctor: invalid row alignment value");
+	}
 }
 
 Image::~Image()
 {
-	if (raster != nullptr) {
-		stbi_image_free(static_cast<void*>(raster));
+	if (deleter != nullptr && raster != nullptr) {
+		deleter(raster);
 	}
 }
 
 Image& Image::operator=(Image&& other) noexcept
 {
-	if (raster != nullptr && raster != other.raster) {
-		stbi_image_free(static_cast<void*>(raster));
+	if (deleter != nullptr && raster != nullptr && raster != other.raster) {
+		deleter(raster);
 	}
 	width = other.width;
 	height = other.height;
@@ -57,21 +61,36 @@ Image& Image::operator=(Image&& other) noexcept
 	return *this;
 }
 
-Texture::Texture(const Image& image):
+static const unsigned char colours[4] = { 0, 0xFF, 0xFF, 0 };
+const Image bw_checker(2, 2, 1, const_cast<unsigned char*>(colours));
+
+Texture::Texture(const Image& image, GLenum filtering, GLenum wrapping):
 		width(image.get_width()), height(image.get_height())
 {
+	if (image.get_raster() == nullptr) {
+		throw std::runtime_error("Texture::ctor: Cannot create from empty Image");
+	}
 	glGenTextures(1, &texture_name);
 	glBindTexture(GL_TEXTURE_2D, texture_name);
-	// FIXME set Min and Mag filters, Wrap settings, etc...
-	// see: https://www.khronos.org/registry/OpenGL-Refpages/gl4/html/glTexParameter.xhtml
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, filtering);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, filtering);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, wrapping);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, wrapping);
+
+	glPixelStorei(GL_UNPACK_ALIGNMENT, image.get_row_align());
+
 	GLenum format = GL_NONE;
+	GLenum internal_format = GL_NONE;
 	switch (image.get_channels()) {
-		case 1: format = GL_LUMINANCE; break;
-		case 2: format = GL_LUMINANCE_ALPHA; break;
-		case 3: format = GL_RGB; break;
-		default: format = GL_RGBA;
+		case 1: internal_format = GL_R8; format = GL_RED; break; // GL_LUMINANCE deprecated
+		case 2: internal_format = GL_RG8; format = GL_RG; break; // GL_LUMINANCE_ALPHA deprecated
+		case 3: internal_format = GL_RGB8; format = GL_RGB; break;
+		default: internal_format = GL_RGBA8; format = GL_RGBA;
 	}
-	glTexImage2D(GL_TEXTURE_2D, 0, format, image.get_width(), image.get_height(), 0, format, GL_UNSIGNED_BYTE, image.get_raster());
+
+	glTexImage2D(GL_TEXTURE_2D, 0, internal_format, image.get_width(), image.get_height(), 0, format, GL_UNSIGNED_BYTE, image.get_raster());
+	glBindTexture(GL_TEXTURE_2D, GL_NONE);
 }
 
 Texture& Texture::operator=(Texture&& other) noexcept
