@@ -50,7 +50,7 @@ if(EMSCRIPTEN)
     target_link_options(simulation PRIVATE "SHELL:-s EXCEPTION_DEBUG=1 -s DISABLE_EXCEPTION_CATCHING=0 -s DEMANGLE_SUPPORT=1")
   endif()
   # GLFW is provided by emscripten
-  #target_link_options(simulation PRIVATE --preload-file data)
+  target_link_options(simulation PRIVATE --preload-file data/debug_tex.png)
 else()
   find_package(glfw3 REQUIRED)
   include(FindOpenGL)
