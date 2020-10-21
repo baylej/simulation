@@ -32,7 +32,8 @@ void Scene3D::start()
 
 void Scene3D::loop_run([[maybe_unused]] float delta_t)
 {
-	renderer.set_proj_view_matrices(camera);
+	renderer.set_proj_matrix(camera.get_proj_matrix());
+	renderer.set_view_matrix(camera.get_view_matrix());
 	renderer.set_model_matrix(model_m4);
 	renderer.set_has_texture(false);
 	mesh.draw(prim_type_values[prim_type_selected]);

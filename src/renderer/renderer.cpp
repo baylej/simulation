@@ -106,10 +106,14 @@ Renderer::~Renderer() {
 	glDeleteProgram(program);
 }
 
-void Renderer::set_proj_view_matrices(const Camera2D &camera) const
+void Renderer::set_proj_matrix(const glm::mat4& proj_m4) const
 {
-	glUniformMatrix4fv(proj_m4_loc, 1, GL_FALSE, glm::value_ptr(camera.get_proj_matrix()));
-	glUniformMatrix4fv(view_m4_loc, 1, GL_FALSE, glm::value_ptr(camera.get_view_matrix()));
+	glUniformMatrix4fv(proj_m4_loc, 1, GL_FALSE, glm::value_ptr(proj_m4));
+}
+
+void Renderer::set_view_matrix(const glm::mat4& view_m4) const
+{
+	glUniformMatrix4fv(view_m4_loc, 1, GL_FALSE, glm::value_ptr(view_m4));
 }
 
 void Renderer::set_model_matrix(const glm::mat4 &model_m4) const

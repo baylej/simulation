@@ -21,6 +21,7 @@
 #define SIMULATION_SCENE_2D_HPP
 
 #include "../context.hpp"
+#include "../renderer/camera.hpp"
 #include "../renderer/renderer.hpp"
 #include "../renderer/blit.hpp"
 #include "../renderer/texture.hpp"

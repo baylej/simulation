@@ -21,6 +21,7 @@
 #define SIMULATION_SCENE_3D_HPP
 
 #include "../context.hpp"
+#include "../renderer/camera.hpp"
 #include "../renderer/renderer.hpp"
 #include "../renderer/mesh.hpp"
 

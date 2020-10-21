@@ -26,11 +26,12 @@ Scene2D::Scene2D(const Renderer::Renderer& renderer):
 		//texture(Renderer::bw_checker)
 {
 	renderer.use_program();
+	renderer.set_proj_matrix(camera.get_proj_matrix());
+	renderer.set_view_matrix(camera.get_view_matrix());
 }
 
 void Scene2D::loop_run([[maybe_unused]] float delta_t)
 {
-	renderer.set_proj_view_matrices(camera);
 	blitter.blit(texture,0, 0, texture.get_width()*2, texture.get_height(), 0, 0, 1280/2., 720/2.);
 	blitter.blit(texture,0, 0, texture.get_width(), texture.get_height(), 1280/2., 720/2., 1280/2., 720/2.);
 }

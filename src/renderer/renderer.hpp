@@ -21,8 +21,7 @@
 #define SIMULATION_RENDERER_HPP
 
 #include <GLES3/gl3.h>
-
-#include "camera.hpp"
+#include <glm/mat4x4.hpp>
 
 namespace Engine::Renderer {
 
@@ -50,7 +49,8 @@ public:
 	void use_program() const { glUseProgram(program); glUniform1i(tex_loc, texture_unit_name); };
 
 	// To use the following functions, this renderer's program must be in use
-	void set_proj_view_matrices(const Camera2D& camera) const;
+	void set_proj_matrix(const glm::mat4& proj_m4) const;
+	void set_view_matrix(const glm::mat4& view_m4) const;
 	void set_model_matrix(const glm::mat4& model_m4) const;
 	void set_has_texture(bool has_tex) const;
 	void set_texture_matrix(const glm::mat3& tex_m3) const;
