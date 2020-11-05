@@ -106,7 +106,9 @@ void Main::main_loop()
 	// ---
 
 	// Render here
-	Context_holder::get().get_context()->loop_run(0.f);
+	double curr_t = glfwGetTime();
+	Context_holder::get().get_context()->loop_run(curr_t - last_frame_t);
+	last_frame_t = curr_t;
 
 	// ---
 	ImGui::Render();

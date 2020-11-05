@@ -53,6 +53,7 @@ public:
 
 private:
 	GLFWwindow* window = nullptr;
+	double last_frame_t = 0;
 	static Main* instance; // Please set the instance (in main())
 
 	static void error_callback(int, const char*);

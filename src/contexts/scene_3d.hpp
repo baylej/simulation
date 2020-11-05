@@ -44,8 +44,10 @@ private:
 	const Renderer::Renderer& renderer;
 	const Renderer::Static_indexed_mesh& mesh;
 
-	Renderer::Camera2D camera;
+	Renderer::Camera3D camera;
 	glm::mat4 model_m4;
+
+	float anim_t = 0;
 
 	// GUI elements
 	static constexpr const char* prim_type_names[] = { "GL_TRIANGLES", "GL_LINE_LOOP", "GL_POINTS" };

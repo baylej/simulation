@@ -93,6 +93,21 @@ private:
 	~Plane() = default;
 };
 
+class Cube: public Static_indexed_mesh {
+public:
+	Cube(const Cube&) = delete;
+	Cube(Cube&&) = delete;
+	Cube &operator=(const Cube&) = delete;
+	Cube &operator=(Cube&&) = delete;
+
+	// Lazy initialised singleton
+	static const Cube& get();
+
+private:
+	Cube();
+	~Cube() = default;
+};
+
 }
 
 #endif //SIMULATION_MESH_HPP

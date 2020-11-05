@@ -18,6 +18,7 @@
 #include "camera.hpp"
 
 #include <glm/ext/matrix_transform.hpp>
+#include <glm/ext/matrix_clip_space.hpp>
 
 using namespace glm;
 
@@ -37,7 +38,27 @@ void Camera2D::update_display_dimensions(unsigned int display_height, unsigned i
 Camera3D::Camera3D()
 {
 	position = glm::vec3(0.f);
-	sight = glm::vec3(0.f);
+	sight = glm::vec3(0.f, 0.f, -1.f);
+}
+
+void Camera3D::set_perspective_projection(float fov_y, float aspect_ratio, float z_near, float z_far)
+{
+	proj_matrix = glm::perspective(fov_y, aspect_ratio, z_near, z_far);
+	// Alternatives:
+	// - perspectiveFov (T fov, T width, T height, T near, T far)
+	// - ortho (T left, T right, T bottom, T top, T zNear, T zFar)
+	// - infinitePerspective (T fovy, T aspect, T near)
+	// - frustum (T left, T right, T bottom, T top, T near, T far)
+	// - tweakedInfinitePerspective (T fovy, T aspect, T near)
+
+	// Suffixes:
+	// - ZO : The near and far clip planes correspond to z normalized device coordinates of  0 and +1 respectively. (Direct3D clip volume definition)
+	// - NO : The near and far clip planes correspond to z normalized device coordinates of -1 and +1 respectively. (OpenGL clip volume definition)
+}
+
+void Camera3D::update_camera()
+{
+	view_matrix = glm::lookAt(position, sight, glm::vec3(0, 1, 0));
 }
 
 } // namespace Engine::Renderer

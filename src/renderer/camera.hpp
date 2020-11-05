@@ -26,8 +26,19 @@ namespace Engine::Renderer {
 
 class Camera {
 public:
-	[[nodiscard]] virtual const glm::mat4& get_proj_matrix() const = 0;
-	[[nodiscard]] virtual const glm::mat4& get_view_matrix() const = 0;
+
+	[[nodiscard]] const glm::mat4& get_proj_matrix() const
+	{
+		return proj_matrix;
+	}
+
+	[[nodiscard]] const glm::mat4& get_view_matrix() const
+	{
+		return view_matrix;
+	}
+protected:
+	glm::mat4 proj_matrix;
+	glm::mat4 view_matrix;
 };
 
 // 2D camera, translates absolute screen coordinates in pixel (Origin is bottom-left) to OpenGL screen coordinates (-1,+1)
@@ -40,21 +51,8 @@ public:
 	Camera2D& operator=(const Camera2D&) = default;
 	Camera2D& operator=(Camera2D&&) = default;
 
+	// Update this camera's view and projection matrices
 	void update_display_dimensions(unsigned int display_height, unsigned int display_width);
-
-	[[nodiscard]] const glm::mat4& get_proj_matrix() const override
-	{
-		return proj_matrix;
-	}
-
-	[[nodiscard]] const glm::mat4& get_view_matrix() const override
-	{
-		return view_matrix;
-	}
-
-private:
-	glm::mat4 proj_matrix;
-	glm::mat4 view_matrix;
 };
 
 class Camera3D: public Camera {
@@ -65,7 +63,24 @@ public:
 	Camera3D(Camera3D&&) = default;
 	Camera3D& operator=(const Camera3D&) = default;
 	Camera3D& operator=(Camera3D&&) = default;
-private:
+
+	void set_pos(const glm::vec3& pos)
+	{
+		position = pos;
+	}
+	void set_sight(const glm::vec3& sight)
+	{
+		this->sight = sight;
+	}
+	// TODO functions to move the camera along its local orientation (FPS camera)
+
+	// Update this camera's projection matrix
+	void set_perspective_projection(float fov_y = /* PI/3 */ 1.0471975511965976, float aspect_ratio = 16 / 9.f, float z_near = .1f, float z_far = 100.f);
+	// Update this camera's view and matrix from its position and sight vector
+	// should be called only once per frame
+	void update_camera();
+
+protected:
 	glm::vec3 position;
 	glm::vec3 sight;
 };

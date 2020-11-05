@@ -32,6 +32,9 @@ void Scene3D::start()
 
 void Scene3D::loop_run([[maybe_unused]] float delta_t)
 {
+	anim_t += delta_t;
+	camera.set_pos({0, 0, .5 + glm::abs(glm::cos(anim_t))});
+	camera.update_camera();
 	renderer.set_proj_matrix(camera.get_proj_matrix());
 	renderer.set_view_matrix(camera.get_view_matrix());
 	renderer.set_model_matrix(model_m4);
@@ -41,9 +44,12 @@ void Scene3D::loop_run([[maybe_unused]] float delta_t)
 	Renderer::check_gl_error("Scene3D::loop_run");
 #endif
 	ImGui::SetNextWindowPos({0, 0}); // Top-Left corner
-	ImGui::Begin("Options", nullptr, 0);
+	ImGui::Begin("Scene 3D Options", nullptr, 0);
 
 	ImGui::Combo("Primitive type", &prim_type_selected, prim_type_names, IM_ARRAYSIZE(prim_type_names), IM_ARRAYSIZE(prim_type_names));
+	if (ImGui::Button("Back to Menu")) {
+		Context_holder::get().set_context(Context_holder::get().menu);
+	}
 
 	ImGui::End();
 }
@@ -51,10 +57,11 @@ void Scene3D::loop_run([[maybe_unused]] float delta_t)
 Scene3D::Scene3D(const Renderer::Renderer& renderer, const Renderer::Static_indexed_mesh& mm):
 	renderer(renderer),
 	mesh(mm),
-	camera(Main::get()->display_height, Main::get()->display_width)
+	camera()
 {
+	camera.set_perspective_projection();
 	renderer.use_program();
-	model_m4 = glm::scale(glm::translate(glm::mat4(1.f), glm::vec3(Main::get()->display_width / 2.f, Main::get()->display_height/2.f, 0)), glm::vec3(200, 200, 1));
+	model_m4 = glm::mat4(1.);
 }
 
 }
