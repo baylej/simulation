@@ -30,9 +30,8 @@ Camera2D::Camera2D(unsigned int display_height, unsigned int display_width)
 
 void Camera2D::update_display_dimensions(unsigned int display_height, unsigned int display_width)
 {
-	proj_matrix = mat4(1.f);
-	proj_matrix[2].z = 0.f;
-	view_matrix = scale(translate(mat4(1.f), vec3(-1, -1, 0)), vec3(2/static_cast<float>(display_width), 2/static_cast<float>(display_height), 1));
+	proj_matrix = translate(mat4(1.f), vec3(-1.f, -1.f, 0)) * scale(mat4(1.f), vec3(2.f, 2.f, 0));
+	view_matrix = scale(mat4(1.f), vec3(1/static_cast<float>(display_width), 1/static_cast<float>(display_height), 1.f));
 }
 
 Camera3D::Camera3D()

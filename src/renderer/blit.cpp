@@ -23,8 +23,8 @@
 
 namespace Engine::Renderer {
 
-Blitter::Blitter(const Renderer& renderer, const Plane& plane) :
-		renderer(renderer), plane(plane)
+Blitter::Blitter(const Renderer& renderer) :
+		renderer(renderer), plane()
 {}
 
 void Blitter::blit(const Texture& tex,
@@ -33,11 +33,17 @@ void Blitter::blit(const Texture& tex,
 {
 	glActiveTexture(GL_TEXTURE0 + Renderer::texture_unit_name);
 	glBindTexture(GL_TEXTURE_2D, tex.get_texture_name());
-	renderer.set_model_matrix(glm::scale(glm::translate(glm::mat4(1.), glm::vec3(dst_x + dst_w/2., dst_y + dst_h/2., 0)), glm::vec3(dst_w/2., dst_h/2., 0)));
+	//renderer.set_model_matrix(glm::scale(glm::translate(glm::mat4(1.), glm::vec3(dst_x + dst_w/2., dst_y + dst_h/2., 0)), glm::vec3(dst_w/2., dst_h/2., 0)));
+	renderer.set_model_matrix(glm::scale(glm::translate(glm::mat4(1.), glm::vec3(dst_x, dst_y, 0)), glm::vec3(dst_w, dst_h, 0)));
 	renderer.set_has_texture(true);
 	renderer.set_texture_matrix(glm::scale(glm::translate(glm::mat4(1.), glm::vec3(src_x / tex.get_width(), src_y / tex.get_height(), 0)), glm::vec3(src_w / tex.get_width(), src_h / tex.get_height(), 0)));
 
 	plane.draw();
 }
+
+Blitter::Plane::Plane():
+		Static_indexed_mesh({0, 1, 2, 0, 2, 3}, {0, 0, 0, 0, 1, 0, 1, 1, 0, 1, 0, 0}, {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}, {0, 0, 0, 1, 1, 1, 1, 0})
+{}
+
 
 } // namespace Engine::Renderer

@@ -29,7 +29,7 @@ namespace Engine::Renderer {
 // A texture blitter to use with the Camera2D
 class Blitter {
 public:
-	Blitter(const Renderer &renderer, const Plane &plane);
+	Blitter(const Renderer &renderer);
 	~Blitter() = default;
 	Blitter(const Blitter&) = delete;
 	Blitter(Blitter&&) = delete;
@@ -43,7 +43,10 @@ public:
 
 private:
 	const Renderer& renderer;
-	const Plane& plane;
+	const struct Plane : public Static_indexed_mesh {
+		Plane();
+		~Plane() = default;
+	} plane;
 };
 
 } // namespace Engine::Renderer

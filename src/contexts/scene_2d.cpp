@@ -23,7 +23,7 @@
 namespace Engine::Contexts {
 
 Scene2D::Scene2D(const Renderer::Renderer& renderer):
-		renderer(renderer), camera(Main::get()->display_height, Main::get()->display_width), blitter(renderer, Renderer::Plane::get()),
+		renderer(renderer), camera(Main::get()->display_height, Main::get()->display_width), blitter(renderer),
 		texture(Renderer::Image("data/debug_tex.png"))
 		//texture(Renderer::bw_checker)
 {
