@@ -20,6 +20,7 @@
 #include "context.hpp"
 #include "contexts/menu.hpp"
 #include "renderer/utils.hpp"
+#include "renderer/texture.hpp"
 
 // ImGui is included first in example programs
 #include <imgui/imgui.h>
@@ -88,6 +89,8 @@ void Main::init()
 	// TODO: Fill optional fields of the io structure later.
 	ImGui_ImplGlfw_InitForOpenGL(window, true);
 	ImGui_ImplOpenGL3_Init();
+
+	Renderer::Image::init();
 
 	// Initial context is the menu
 	Contexts::Menu* menu = new Contexts::Menu;

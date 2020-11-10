@@ -61,6 +61,11 @@ Image& Image::operator=(Image&& other) noexcept
 	return *this;
 }
 
+void Image::init()
+{
+	stbi_set_flip_vertically_on_load(true);
+}
+
 static const unsigned char colours[4] = { 0, 0xFF, 0xFF, 0 };
 const Image bw_checker(2, 2, 1, const_cast<unsigned char*>(colours));
 

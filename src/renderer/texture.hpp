@@ -26,6 +26,9 @@ namespace Engine::Renderer {
 
 class Image {
 public:
+	// Static code to call once to initialise the image loading lib
+	static void init();
+
 	// ctor
 	Image(const std::string& filename);
 	Image(int width, int height, int channels, unsigned char* raster, int row_align = 1, void (*del)(unsigned char*) = nullptr);
