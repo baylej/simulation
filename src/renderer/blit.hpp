@@ -29,7 +29,7 @@ namespace Engine::Renderer {
 // A texture blitter to use with the Camera2D
 class Blitter {
 public:
-	Blitter(const Renderer &renderer);
+	explicit Blitter(const Renderer &renderer);
 	~Blitter() = default;
 	Blitter(const Blitter&) = delete;
 	Blitter(Blitter&&) = delete;
@@ -38,8 +38,9 @@ public:
 
 	// Use screen coordinates in pixels absolute (see Camera2D)
 	void blit(const Texture& tex,
-	       float src_x, float src_y, float src_w, float src_h,
-	       float dst_x, float dst_y, float dst_w, float dst_h) const; // TODO: add rotation and blend colour
+	          glm::vec2 src_pos, glm::vec2 src_dim,
+	          glm::vec2 dst_pos, glm::vec2 dst_dim,
+	          float angle = 0.f, glm::vec3 tint = glm::vec3(0.)) const;
 
 private:
 	const Renderer& renderer;

@@ -22,6 +22,8 @@
 
 #include "utils.hpp"
 
+#include <glm/vec2.hpp>
+
 namespace Engine::Renderer {
 
 class Image {
@@ -77,11 +79,12 @@ public:
 	~Texture();
 
 	[[nodiscard]] GLuint get_texture_name() const { return texture_name; }
-	[[nodiscard]] int get_width() const { return width; }
-	[[nodiscard]] int get_height() const { return height; }
+	[[nodiscard]] int get_width() const { return dimensions.x; }
+	[[nodiscard]] int get_height() const { return dimensions.y; }
+	[[nodiscard]] glm::vec2 get_dimensions() const { return dimensions; }
 
 private:
-	int width, height;
+	glm::vec2 dimensions;
 	GLuint texture_name;
 };
 

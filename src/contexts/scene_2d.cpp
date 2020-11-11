@@ -19,6 +19,10 @@
 #include "../main.hpp"
 
 #include <imgui/imgui.h>
+#include <glm/vec2.hpp>
+#include <glm/vec3.hpp>
+
+using glm::vec2, glm::vec3;
 
 namespace Engine::Contexts {
 
@@ -34,8 +38,10 @@ Scene2D::Scene2D(const Renderer::Renderer& renderer):
 
 void Scene2D::loop_run([[maybe_unused]] float delta_t)
 {
-	blitter.blit(texture,0, 0, texture.get_width()*2, texture.get_height(), 0, 0, 1280/2., 720/2.);
-	blitter.blit(texture,0, 0, texture.get_width(), texture.get_height(), 1280/2., 720/2., 1280/2., 720/2.);
+	anim_t += delta_t;
+	blitter.blit(texture, vec2(0), vec2(texture.get_width()*2, texture.get_height()), vec2(0), vec2(1280/2., 720/2.));
+	blitter.blit(texture, vec2(0), vec2(texture.get_width(), texture.get_height()), vec2(1280/2., 720/2.), vec2(1280/2., 720/2.));
+	blitter.blit(texture, vec2(0), vec2(texture.get_width(), texture.get_height()), vec2(1280/4., 3*720/4.), vec2(200., 200.), anim_t * 3.141592/20.);
 
 	ImGui::SetNextWindowPos({0, 0}); // Top-Left corner
 	ImGui::Begin("Scene 2D Options", nullptr, 0);

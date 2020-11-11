@@ -39,6 +39,8 @@ private:
 	Renderer::Camera2D camera;
 	Renderer::Blitter blitter;
 	Renderer::Texture texture;
+
+	float anim_t = 0;
 };
 
 } // namespace Engine::Contexts

@@ -28,15 +28,15 @@ Blitter::Blitter(const Renderer& renderer) :
 {}
 
 void Blitter::blit(const Texture& tex,
-		float src_x, float src_y, float src_w, float src_h,
-		float dst_x, float dst_y, float dst_w, float dst_h) const
+                   glm::vec2 src_pos, glm::vec2 src_dim,
+                   glm::vec2 dst_pos, glm::vec2 dst_dim,
+                   float angle, glm::vec3 tint) const
 {
 	glActiveTexture(GL_TEXTURE0 + Renderer::texture_unit_name);
 	glBindTexture(GL_TEXTURE_2D, tex.get_texture_name());
-	//renderer.set_model_matrix(glm::scale(glm::translate(glm::mat4(1.), glm::vec3(dst_x + dst_w/2., dst_y + dst_h/2., 0)), glm::vec3(dst_w/2., dst_h/2., 0)));
-	renderer.set_model_matrix(glm::scale(glm::translate(glm::mat4(1.), glm::vec3(dst_x, dst_y, 0)), glm::vec3(dst_w, dst_h, 0)));
+	renderer.set_model_matrix(glm::rotate(glm::scale(glm::translate(glm::mat4(1.), glm::vec3(dst_pos, 0)), glm::vec3(dst_dim, 0)), angle, glm::vec3(0, 0, 1)));
 	renderer.set_has_texture(true);
-	renderer.set_texture_matrix(glm::scale(glm::translate(glm::mat4(1.), glm::vec3(src_x / tex.get_width(), src_y / tex.get_height(), 0)), glm::vec3(src_w / tex.get_width(), src_h / tex.get_height(), 0)));
+	renderer.set_texture_matrix(glm::scale(glm::translate(glm::mat4(1.), glm::vec3(src_pos / tex.get_dimensions(), 0)), glm::vec3(src_dim / tex.get_dimensions(), 0)));
 
 	plane.draw();
 }

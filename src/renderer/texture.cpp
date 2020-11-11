@@ -70,7 +70,7 @@ static const unsigned char colours[4] = { 0, 0xFF, 0xFF, 0 };
 const Image bw_checker(2, 2, 1, const_cast<unsigned char*>(colours));
 
 Texture::Texture(const Image& image, GLenum filtering, GLenum wrapping):
-		width(image.get_width()), height(image.get_height())
+		dimensions(image.get_width(), image.get_height())
 {
 	if (image.get_raster() == nullptr) {
 		throw std::runtime_error("Texture::ctor: Cannot create from empty Image");
@@ -105,8 +105,7 @@ Texture& Texture::operator=(Texture&& other) noexcept
 	}
 	texture_name = other.texture_name;
 	other.texture_name = GL_NONE;
-	width = other.width;
-	height = other.height;
+	dimensions = other.dimensions;
 	return *this;
 }
 
