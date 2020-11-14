@@ -36,11 +36,20 @@ public:
 	Blitter& operator=(const Blitter&) = delete;
 	Blitter& operator=(Blitter&&) = delete;
 
+	// Base blit function, used by more user friendly functions below
+	void blit(const Texture& tex, const glm::mat4& model_matrix, const glm::mat3& texture_matrix, const glm::vec4& tint = glm::vec4(1.)) const;
+
+	// Draw texture at the given coordinate
+	void blit(const Texture& tex, glm::vec2 dst_pos, glm::vec4 tint = glm::vec4(1.)) const;
+
+	// Draw texture rotated on its center
+	void blit(const Texture& tex, glm::vec2 dst_pos, float angle, glm::vec4 tint = glm::vec4(1.)) const;
+
 	// Use screen coordinates in pixels absolute (see Camera2D)
 	void blit(const Texture& tex,
 	          glm::vec2 src_pos, glm::vec2 src_dim,
 	          glm::vec2 dst_pos, glm::vec2 dst_dim,
-	          float angle = 0.f, glm::vec3 tint = glm::vec3(0.)) const;
+	          glm::vec2 center = {0,0}, float angle = 0.f, glm::vec4 tint = glm::vec4(1.)) const;
 
 private:
 	const Renderer& renderer;

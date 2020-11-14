@@ -57,17 +57,18 @@ in highp vec2 uv;
 uniform bool has_tex;
 uniform sampler2D tex;
 uniform highp mat3 tex_m3;
+uniform highp vec4 tint;
 
 void main()
 {
 	if (has_tex) {
 		highp vec3 tex_coord = tex_m3 * vec3(uv, 1.);
-		frag_colour = texture(tex, tex_coord.st);
+		frag_colour = texture(tex, tex_coord.st) * tint;
 		// DEBUG to see UV values as RG colors (texture lookup because the shader compiler optimisation removes unused uniforms)
-//		frag_colour = vec4(tex_coord.st, 0., texture(tex, tex_coord.st).a);
+		// frag_colour = vec4(tex_coord.st, 0., texture(tex, tex_coord.st).a * tint.s);
 	}
 	else {
-		frag_colour = vec4(colour, 1.0);
+		frag_colour = vec4(colour, 1.0) * tint;
 	}
 })shader";
 
@@ -98,11 +99,13 @@ Renderer::Renderer()
 	has_tex_loc = get_check_uniform(program, "has_tex");
 	tex_loc = get_check_uniform(program, "tex");
 	tex_m3_loc = get_check_uniform(program, "tex_m3");
+	tint_loc = get_check_uniform(program, "tint");
 
 	check_gl_error("Renderer::ctor#2"s);
 }
 
-Renderer::~Renderer() {
+Renderer::~Renderer()
+{
 	glDeleteProgram(program);
 }
 
@@ -129,6 +132,11 @@ void Renderer::set_has_texture(bool has_tex) const
 void Renderer::set_texture_matrix(const glm::mat3& tex_m3) const
 {
 	glUniformMatrix3fv(tex_m3_loc, 1, GL_FALSE, glm::value_ptr(tex_m3));
+}
+
+void Renderer::set_tint_colour(const glm::vec4& tint_col) const
+{
+	glUniform4fv(tint_loc, 1, glm::value_ptr(tint_col));
 }
 
 } // namespace Engine::N3D

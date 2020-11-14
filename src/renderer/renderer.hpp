@@ -54,6 +54,7 @@ public:
 	void set_model_matrix(const glm::mat4& model_m4) const;
 	void set_has_texture(bool has_tex) const;
 	void set_texture_matrix(const glm::mat3& tex_m3) const;
+	void set_tint_colour(const glm::vec4& tint_col) const;
 
 private:
 	GLuint program;
@@ -67,6 +68,7 @@ private:
 	GLint has_tex_loc;
 	GLint tex_loc;
 	GLint tex_m3_loc;
+	GLint tint_loc;
 };
 
 } // namespace Engine::N3D

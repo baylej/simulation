@@ -27,7 +27,7 @@ namespace Engine::Contexts {
 
 void Scene3D::start()
 {
-	Context::start();
+	renderer.set_tint_colour(glm::vec4(1.));
 }
 
 void Scene3D::loop_run([[maybe_unused]] float delta_t)
