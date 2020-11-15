@@ -51,6 +51,9 @@ public:
 	          glm::vec2 dst_pos, glm::vec2 dst_dim,
 	          glm::vec2 center = {0,0}, float angle = 0.f, glm::vec4 tint = glm::vec4(1.)) const;
 
+	// Draw a rectangle filled with the given colour
+	void rect_filled(glm::vec2 src_pos, glm::vec2 src_dim, glm::vec4 tint, float angle = 0.f) const;
+
 private:
 	const Renderer& renderer;
 	const struct Plane : public Static_indexed_mesh {

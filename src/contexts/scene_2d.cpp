@@ -33,6 +33,9 @@ Scene2D::Scene2D(const Renderer::Renderer& renderer):
 	renderer.use_program();
 	renderer.set_proj_matrix(camera.get_proj_matrix());
 	renderer.set_view_matrix(camera.get_view_matrix());
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glBlendEquation(GL_FUNC_ADD);
 }
 
 void Scene2D::loop_run([[maybe_unused]] float delta_t)
@@ -43,6 +46,11 @@ void Scene2D::loop_run([[maybe_unused]] float delta_t)
 	blitter.blit(texture, vec2(0), vec2(texture.get_width(), texture.get_height()), vec2(1280/4., 3*720/4.), vec2(200., 200.), {50, 50}, anim_t * 3.141592/20.);
 	blitter.blit(texture, vec2(0), vec2(texture.get_width()*2, texture.get_height()), vec2(0), vec2(1280/2., 720/2.));
 	blitter.blit(texture, vec2(0), vec2(texture.get_width(), texture.get_height()), vec2(1280/2., 720/2.), vec2(1280/2., 720/2.));
+
+	blitter.rect_filled({0, 0}, {180, 108}, {0, 0, 0, .3});
+	blitter.rect_filled({0, 0}, {50, 100}, {0, 0, 1, .5}, 3.141592/6.f);
+	blitter.rect_filled({50, 0}, {50, 100}, {1, 1, 1, .5}, 3.141592/5.f);
+	blitter.rect_filled({100, 0}, {50, 100}, {1, 0, 0, .5}, 3.141592/4.f);
 
 	ImGui::SetNextWindowPos({0, 0}); // Top-Left corner
 	ImGui::Begin("Scene 2D Options", nullptr, 0);

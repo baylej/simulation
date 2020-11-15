@@ -18,7 +18,6 @@
 #include "blit.hpp"
 #include "utils.hpp"
 
-#include <stdexcept>
 #include <glm/ext/matrix_transform.hpp>
 
 namespace Engine::Renderer {
@@ -71,6 +70,19 @@ void Blitter::blit(const Texture& tex,
 	glm::mat3 tex_m3 = glm::translate(glm::mat4(1.), glm::vec3(src_pos / tex.get_dimensions(), 0))
 	                 * glm::scale(glm::mat4(1.), glm::vec3(src_dim / tex.get_dimensions(), 0));
 	blit(tex, model_m4, tex_m3, tint);
+}
+
+void Blitter::rect_filled(glm::vec2 pos, glm::vec2 dim, glm::vec4 tint, float angle) const
+{
+	glm::mat4 model_matrix = glm::translate(glm::mat4(1.), glm::vec3(pos + dim/2.f, 0))
+	                       * glm::rotate(glm::mat4(1.), angle, glm::vec3(0, 0, 1))
+	                       * glm::translate(glm::mat4(1.), glm::vec3(-dim/2.f, 0))
+	                       * glm::scale(glm::mat4(1.), glm::vec3(dim, 0));
+	renderer.set_model_matrix(model_matrix);
+
+	renderer.set_has_texture(false);
+	renderer.set_tint_colour(tint);
+	plane.draw();
 }
 
 Blitter::Plane::Plane():
