@@ -52,6 +52,9 @@ void Scene2D::loop_run([[maybe_unused]] float delta_t)
 	blitter.rect_filled({50, 0}, {50, 100}, {1, 1, 1, .5}, 3.141592/5.f);
 	blitter.rect_filled({100, 0}, {50, 100}, {1, 0, 0, .5}, 3.141592/4.f);
 
+	blitter.stream_vertices({0, 0, 0,  10, 100, 0,  100, 100, 0}, GL_TRIANGLES, {1., 0., 0., 1.});
+	Renderer::check_gl_error("Scene2D::loop_run: after blitter.stream_vertices");
+
 	ImGui::SetNextWindowPos({0, 0}); // Top-Left corner
 	ImGui::Begin("Scene 2D Options", nullptr, 0);
 

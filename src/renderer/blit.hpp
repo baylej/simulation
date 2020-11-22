@@ -55,8 +55,12 @@ public:
 	// Draw a rectangle filled with the given colour, rotated on its center
 	void rect_filled(glm::vec2 src_pos, glm::vec2 src_dim, glm::vec4 tint, float angle = 0.f) const;
 
+	// Stream vertices
+	void stream_vertices(const std::vector<GLfloat>& vertices, GLenum draw_mode, glm::vec4 tint = glm::vec4(1.)) const;
+
 private:
 	const Renderer& renderer;
+	const GLuint buf_name;
 	const struct Plane : public Static_indexed_mesh {
 		Plane();
 		~Plane() = default;
