@@ -89,16 +89,59 @@ void Blitter::rect_filled(glm::vec2 pos, glm::vec2 dim, glm::vec4 tint, float an
 // If drawing lines, Set line thickness before calling this function
 void Blitter::stream_vertices(const std::vector<GLfloat>& vertices, GLenum draw_mode, glm::vec4 tint) const
 {
-	transfer_geometry<GL_ARRAY_BUFFER, GL_STREAM_DRAW>(Renderer::vertex_pos_attr_loc, buf_name, vertices);
+	constexpr GLint component_number = 2;
+	transfer_geometry<GL_ARRAY_BUFFER, GL_STREAM_DRAW, component_number>(Renderer::vertex_pos_attr_loc, buf_name, vertices);
 	glVertexAttrib3f(Renderer::vertex_col_attr_loc, tint.r, tint.g, tint.b); // Set the value used when that vertex attrib is disabled: do not enable!!
 	renderer.set_has_texture(false);
 	renderer.set_tint_colour(glm::vec4(1.f));
 
 	renderer.set_model_matrix(glm::mat4(1.f));
-	glDrawArrays(draw_mode, 0, vertices.size() / 3);
+	glDrawArrays(draw_mode, 0, vertices.size() / component_number);
 
 	glBindBuffer(GL_ARRAY_BUFFER, GL_NONE);
 	glDisableVertexAttribArray(Renderer::vertex_pos_attr_loc);
+}
+
+void Blitter::polyline(const vector<GLfloat>& vertices, GLfloat line_thickness, glm::vec4 tint) const
+{
+	glLineWidth(line_thickness);
+	stream_vertices(vertices, GL_LINE_STRIP, tint);
+}
+
+void Blitter::polygon(const vector<GLfloat>& vertices, GLfloat line_thickness, glm::vec4 tint) const
+{
+    glLineWidth(line_thickness);
+    stream_vertices(vertices, GL_LINE_LOOP, tint);
+}
+
+void Blitter::polygon_filled(const vector<GLfloat>& vertices, glm::vec4 tint) const
+{
+	// Solution that only works with convex polygons:
+    // find the barycenter of all points in vertices, and prepend vertices with the points
+	// then render using GL_TRIANGLE_FAN
+    polygon(vertices, 1.f, tint); // TODO
+}
+
+void Blitter::circle(glm::vec2 center, float radius, GLfloat line_thickness, glm::vec4 tint) const
+{
+	float prim_gen_number = std::ceil(std::log(radius - 3.f) * 5 + 5);
+	float angle = PI_2 / prim_gen_number;
+	glm::vec3 base_point(radius, 0., 0.);
+	glm::mat3 rot_m(glm::rotate(glm::mat4(1.f), angle, glm::vec3(0, 0, 1)));
+
+	std::vector<GLfloat> vertices(2 * static_cast<int>(prim_gen_number));
+	for (int it=0; it<prim_gen_number; it++) {
+		glm::vec3 vertex = (static_cast<float>(it) * rot_m) * base_point;
+		vertices[it*2]     = vertex.x;
+        vertices[it*2 + 1] = vertex.y;
+	}
+
+	// TODO model matrix to translate the circle
+	polygon(vertices, line_thickness, tint);
+}
+
+void Blitter::disc(glm::vec2 center, float radius, glm::vec4 tint) const
+{
 }
 
 Blitter::Plane::Plane():

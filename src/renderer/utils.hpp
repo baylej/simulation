@@ -27,6 +27,14 @@
 
 #include <GLES3/gl3.h>
 
+constexpr float PI         = 3.141592653589793f; // acos(-1.f)
+constexpr float PI_2       = 6.283185307179586f; // 2*acos(-1)
+constexpr float PI_HALF    = 1.5707963267948966; // acos(-1)/2.f
+constexpr float PI_THIRD   = 1.0471975511965976; // acos(-1)/3.f
+constexpr float PI_QUARTER = 0.7853981633974483; // acos(-1)/4.f
+constexpr float PI_SIXTH   = 0.5235987755982988; // acos(-1)/6.f
+constexpr float PI_2THIRD  = 2.0943951023931953; // 2*acos(-1)/3.f
+
 namespace Engine::Renderer {
 
 // Checks whether an error occurred in the GL calls performed until now

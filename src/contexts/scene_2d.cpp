@@ -52,7 +52,10 @@ void Scene2D::loop_run([[maybe_unused]] float delta_t)
 	blitter.rect_filled({50, 0}, {50, 100}, {1, 1, 1, .5}, 3.141592/5.f);
 	blitter.rect_filled({100, 0}, {50, 100}, {1, 0, 0, .5}, 3.141592/4.f);
 
-	blitter.stream_vertices({0, 0, 0,  10, 100, 0,  100, 100, 0}, GL_TRIANGLES, {1., 0., 0., 1.});
+	blitter.stream_vertices({0, 300,  10, 400,  100, 400}, GL_TRIANGLES, {1., 0., 0., 1.});
+	blitter.polyline({400, 400,   500, 400,   500, 500,   600, 500,   600, 600}, 5.f, {0., 1., 0., 1.});
+	blitter.polygon({400, 200,   500, 200,   550, 300,   450, 300}, 8.f, {0., 0., 1., 1.});
+	blitter.circle({800, 600}, 5, 3.f);
 	Renderer::check_gl_error("Scene2D::loop_run: after blitter.stream_vertices");
 
 	ImGui::SetNextWindowPos({0, 0}); // Top-Left corner

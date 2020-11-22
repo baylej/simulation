@@ -58,6 +58,12 @@ public:
 	// Stream vertices
 	void stream_vertices(const std::vector<GLfloat>& vertices, GLenum draw_mode, glm::vec4 tint = glm::vec4(1.)) const;
 
+	void polyline(const std::vector<GLfloat>& vertices, GLfloat line_thickness = 1.0f, glm::vec4 tint = glm::vec4(1.)) const;
+	void polygon(const std::vector<GLfloat>& vertices, GLfloat line_thickness = 1.0f, glm::vec4 tint = glm::vec4(1.)) const;
+	void polygon_filled(const std::vector<GLfloat>& vertices, glm::vec4 tint = glm::vec4(1.)) const;
+	void circle(glm::vec2 center, float radius, GLfloat line_thickness = 1.0f, glm::vec4 tint = glm::vec4(1.)) const;
+	void disc(glm::vec2 center, float radius, glm::vec4 tint = glm::vec4(1.)) const;
+
 private:
 	const Renderer& renderer;
 	const GLuint buf_name;
