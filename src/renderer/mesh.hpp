@@ -33,6 +33,7 @@ class Static_indexed_mesh {
 public:
 	// Creates a VAO and Buffers and loads the data
 	Static_indexed_mesh(const vector<GLuint>& indices, const vector<GLfloat>& vertices, const vector<GLfloat>& colors, const vector<GLfloat>& uvs);
+
 	// Delete the VAO and Buffers
 	~Static_indexed_mesh();
 
@@ -44,6 +45,7 @@ public:
 
 	// Indices are already bound in the returned VAO, you probably want to use member function `draw`
 	[[nodiscard]] GLuint get_vao() const { return vao; }
+
 	// Draw mesh,
 	void draw(GLenum type = GL_TRIANGLES) const;
 
@@ -65,12 +67,12 @@ private:
 
 void draw_geometry(const vector<GLuint>& indices, const vector<GLfloat>& vertices, const vector<GLfloat>& colors, const vector<GLfloat>& uvs, GLenum type = GL_TRIANGLES);
 
-class Triangle : public Static_indexed_mesh {
+class Triangle: public Static_indexed_mesh {
 public:
 	Triangle(const Triangle&) = delete;
 	Triangle(Triangle&&) = delete;
-	Triangle &operator=(const Triangle&) = delete;
-	Triangle &operator=(Triangle&&) = delete;
+	Triangle& operator=(const Triangle&) = delete;
+	Triangle& operator=(Triangle&&) = delete;
 
 	// Lazy initialised singleton
 	static const Triangle& get();
@@ -80,12 +82,12 @@ private:
 	~Triangle() = default;
 };
 
-class Plane : public Static_indexed_mesh {
+class Plane: public Static_indexed_mesh {
 public:
 	Plane(const Plane&) = delete;
 	Plane(Plane&&) = delete;
-	Plane &operator=(const Plane&) = delete;
-	Plane &operator=(Plane&&) = delete;
+	Plane& operator=(const Plane&) = delete;
+	Plane& operator=(Plane&&) = delete;
 
 	// Lazy initialised singleton
 	static const Plane& get();
@@ -99,8 +101,8 @@ class Cube: public Static_indexed_mesh {
 public:
 	Cube(const Cube&) = delete;
 	Cube(Cube&&) = delete;
-	Cube &operator=(const Cube&) = delete;
-	Cube &operator=(Cube&&) = delete;
+	Cube& operator=(const Cube&) = delete;
+	Cube& operator=(Cube&&) = delete;
 
 	// Lazy initialised singleton
 	static const Cube& get();
@@ -110,6 +112,6 @@ private:
 	~Cube() = default;
 };
 
-}
+} // namespace Engine::Renderer
 
 #endif //SIMULATION_MESH_HPP

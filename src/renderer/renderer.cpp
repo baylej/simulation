@@ -68,7 +68,7 @@ void main()
 		// frag_colour = vec4(tex_coord.st, 0., texture(tex, tex_coord.st).a * tint.s);
 	}
 	else {
-		frag_colour = vec4(colour, 1.0) * tint;
+		frag_colour = vec4(colour, 1.) * tint;
 	}
 })shader";
 
@@ -139,4 +139,4 @@ void Renderer::set_tint_colour(const glm::vec4& tint_col) const
 	glUniform4fv(tint_loc, 1, glm::value_ptr(tint_col));
 }
 
-} // namespace Engine::N3D
+} // namespace Engine::Renderer

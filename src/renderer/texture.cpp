@@ -116,4 +116,4 @@ Texture::~Texture()
 	}
 }
 
-}
+} // namespace Engine::Renderer

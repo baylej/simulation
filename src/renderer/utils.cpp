@@ -94,4 +94,4 @@ void list_uniforms(GLuint program)
 
 }
 
-} // namespace Engine::N3D
+} // namespace Engine::Renderer

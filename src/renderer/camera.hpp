@@ -85,6 +85,6 @@ protected:
 	glm::vec3 sight;
 };
 
-} // namespace Engine::N3D
+} // namespace Engine::Renderer
 
 #endif //SIMULATION_CAMERA_HPP

@@ -71,6 +71,6 @@ private:
 	GLint tint_loc;
 };
 
-} // namespace Engine::N3D
+} // namespace Engine::Renderer
 
 #endif //SIMULATION_RENDERER_HPP

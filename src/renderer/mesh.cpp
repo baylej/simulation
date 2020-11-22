@@ -23,16 +23,6 @@
 
 namespace Engine::Renderer {
 
-template<void (*G)(int, GLuint*)>
-GLuint generateArray(bool generate = true)
-{
-	GLuint name = GL_NONE;
-	if (generate) {
-		G(1, &name);
-	}
-	return name;
-}
-
 Static_indexed_mesh::Static_indexed_mesh(const vector<GLuint>& indices, const vector<GLfloat>& vertices, const vector<GLfloat>& colours, const vector<GLfloat>& uvs):
 		indices_size(indices.size()),
 		indices_buf(generateArray<glGenBuffers>()),
@@ -155,4 +145,4 @@ const Cube& Cube::get()
 	return cube;
 }
 
-}
+} // namespace Engine::Renderer

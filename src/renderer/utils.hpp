@@ -65,6 +65,18 @@ GLint get_check_uniform(GLuint program, const GLchar* uniform_name);
 // List uniform names on std::cerr, for debugging purposes
 void list_uniforms(GLuint program);
 
+// Generates a single Buffer or VAO name (does nothing and returns GL_NONE if parameter==false)
+// Template parameter should be either glGenBuffers or glGenVertexArrays
+template<void (*G)(int, GLuint*)>
+GLuint generateArray(bool generate = true)
+{
+	GLuint name = GL_NONE;
+	if (generate) {
+		G(1, &name);
+	}
+	return name;
+}
+
 // Enables vextex_attrib_loc + binds and send data into target_buf + VertexAttribdata (to be used with a VAO, or DrawArray)
 template<GLuint TargetT, GLuint UsageT, GLint CompNumber = 3, GLboolean Normalized = GL_FALSE, typename GlT = GLfloat, GLuint DataT = GL_FLOAT>
 void transfer_geometry(GLuint vextex_attrib_loc, GLuint target_buf, const std::vector<GlT>& data, GLsizei stride = 0, const void* pointer = nullptr)
@@ -75,6 +87,6 @@ void transfer_geometry(GLuint vextex_attrib_loc, GLuint target_buf, const std::v
     glVertexAttribPointer(vextex_attrib_loc, CompNumber, DataT, Normalized, stride, pointer);
 }
 
-} // namespace Engine::N3D
+} // namespace Engine::Renderer
 
 #endif //SIMULATION_UTILS_HPP
