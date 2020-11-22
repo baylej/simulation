@@ -85,7 +85,7 @@ Renderer::Renderer()
 	glDeleteShader(vert_shader);
 	glDeleteShader(frag_shader);
 
-	check_gl_error("Renderer::ctor#1"s);
+	check_gl_error("Renderer::ctor#1");
 
 	// If there is a uniform that you are not using, the driver will optimize your uniform out.
 	// Then `glGetUniformLocation` returns -1.
@@ -101,7 +101,7 @@ Renderer::Renderer()
 	tex_m3_loc = get_check_uniform(program, "tex_m3");
 	tint_loc = get_check_uniform(program, "tint");
 
-	check_gl_error("Renderer::ctor#2"s);
+	check_gl_error("Renderer::ctor#2");
 }
 
 Renderer::~Renderer()

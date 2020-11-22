@@ -63,6 +63,8 @@ private:
 	const GLuint vao;
 };
 
+void draw_geometry(const vector<GLuint>& indices, const vector<GLfloat>& vertices, const vector<GLfloat>& colors, const vector<GLfloat>& uvs, GLenum type = GL_TRIANGLES);
+
 class Triangle : public Static_indexed_mesh {
 public:
 	Triangle(const Triangle&) = delete;

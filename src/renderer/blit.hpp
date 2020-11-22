@@ -27,6 +27,7 @@
 namespace Engine::Renderer {
 
 // A texture blitter to use with the Camera2D
+// Use screen coordinates in pixels absolute (see Camera2D)
 class Blitter {
 public:
 	explicit Blitter(const Renderer &renderer);
@@ -45,13 +46,13 @@ public:
 	// Draw texture rotated on its center
 	void blit(const Texture& tex, glm::vec2 dst_pos, float angle, glm::vec4 tint = glm::vec4(1.)) const;
 
-	// Use screen coordinates in pixels absolute (see Camera2D)
+	// Draw region of a texture, rotated around a given point, at the specified destination
 	void blit(const Texture& tex,
 	          glm::vec2 src_pos, glm::vec2 src_dim,
 	          glm::vec2 dst_pos, glm::vec2 dst_dim,
 	          glm::vec2 center = {0,0}, float angle = 0.f, glm::vec4 tint = glm::vec4(1.)) const;
 
-	// Draw a rectangle filled with the given colour
+	// Draw a rectangle filled with the given colour, rotated on its center
 	void rect_filled(glm::vec2 src_pos, glm::vec2 src_dim, glm::vec4 tint, float angle = 0.f) const;
 
 private:

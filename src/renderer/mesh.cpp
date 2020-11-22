@@ -43,23 +43,14 @@ Static_indexed_mesh::Static_indexed_mesh(const vector<GLuint>& indices, const ve
 {
 	glBindVertexArray(vao);
 
-	glEnableVertexAttribArray(Renderer::vertex_pos_attr_loc);
-	glBindBuffer(GL_ARRAY_BUFFER, vertices_buf);
-	glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(GLfloat), vertices.data(), GL_STATIC_DRAW);
-	glVertexAttribPointer(Renderer::vertex_pos_attr_loc, vertex_component_number, GL_FLOAT, GL_FALSE, 0, nullptr);
+	transfer_geometry<GL_ARRAY_BUFFER, GL_STATIC_DRAW>(Renderer::vertex_pos_attr_loc, vertices_buf, vertices);
 
 	if (colours_buf) {
-		glEnableVertexAttribArray(Renderer::vertex_col_attr_loc);
-		glBindBuffer(GL_ARRAY_BUFFER, colours_buf);
-		glBufferData(GL_ARRAY_BUFFER, colours.size() * sizeof(GLfloat), colours.data(), GL_STATIC_DRAW);
-		glVertexAttribPointer(Renderer::vertex_col_attr_loc, colour_component_number, GL_FLOAT, GL_FALSE, 0, nullptr);
-	}
+        transfer_geometry<GL_ARRAY_BUFFER, GL_STATIC_DRAW>(Renderer::vertex_col_attr_loc, colours_buf, colours);
+    }
 
 	if (uvs_buf) {
-		glEnableVertexAttribArray(Renderer::vertex_uv_attr_loc);
-		glBindBuffer(GL_ARRAY_BUFFER, uvs_buf);
-		glBufferData(GL_ARRAY_BUFFER, uvs.size() * sizeof(GLfloat), uvs.data(), GL_STATIC_DRAW);
-		glVertexAttribPointer(Renderer::vertex_uv_attr_loc, uv_component_number, GL_FLOAT, GL_FALSE, 0, nullptr);
+        transfer_geometry<GL_ARRAY_BUFFER, GL_STATIC_DRAW, 2>(Renderer::vertex_uv_attr_loc, uvs_buf, uvs);
 	}
 
 	glBindBuffer(GL_ARRAY_BUFFER, GL_NONE);
@@ -70,7 +61,7 @@ Static_indexed_mesh::Static_indexed_mesh(const vector<GLuint>& indices, const ve
 
 	glBindVertexArray(GL_NONE);
 
-	check_gl_error("Mesh::ctor"s);
+	check_gl_error("Mesh::ctor");
 }
 
 Static_indexed_mesh::~Static_indexed_mesh() {
@@ -78,7 +69,7 @@ Static_indexed_mesh::~Static_indexed_mesh() {
 	glDeleteBuffers(1, &indices_buf);
 	glDeleteBuffers(1, &colours_buf);
 	glDeleteBuffers(1, &vertices_buf);
-	check_gl_error("Mesh::dtor"s);
+	check_gl_error("Mesh::dtor");
 }
 
 void Static_indexed_mesh::draw(GLenum prim_type) const
@@ -91,7 +82,7 @@ void Static_indexed_mesh::draw(GLenum prim_type) const
 	glBindVertexArray(GL_NONE);
 
 #ifndef NDEBUG
-	check_gl_error("Mesh::draw"s);
+	check_gl_error("Mesh::draw");
 #endif
 }
 

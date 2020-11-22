@@ -23,10 +23,9 @@
 #include <sstream>
 #include <stdexcept>
 #include <string>
+#include <vector>
 
 #include <GLES3/gl3.h>
-
-using std::literals::string_literals::operator""s;
 
 namespace Engine::Renderer {
 
@@ -37,14 +36,14 @@ inline void check_gl_error(const std::string& where)
 	GLenum error = glGetError();
 	if (error != GL_NO_ERROR) {
 		std::stringstream msg;
-		msg << "GL Error: "s;
+		msg << "GL Error: ";
 		switch (error) {
-			case GL_INVALID_ENUM:                  msg << "invalid enum value"s;                   break;
-			case GL_INVALID_VALUE:                 msg << "invalid argument"s;                     break;
-			case GL_INVALID_OPERATION:             msg << "operation not allowed"s;                break;
-			case GL_INVALID_FRAMEBUFFER_OPERATION: msg << "framebuffer operation not allowed"s;    break;
-			case GL_OUT_OF_MEMORY:                 msg << "OUT OF MEMORY"s;                        break; // this error is fatal to the GL state
-			default:                               msg << "unknown error: "s << error;
+			case GL_INVALID_ENUM:                  msg << "invalid enum value";                   break;
+			case GL_INVALID_VALUE:                 msg << "invalid argument";                     break;
+			case GL_INVALID_OPERATION:             msg << "operation not allowed";                break;
+			case GL_INVALID_FRAMEBUFFER_OPERATION: msg << "framebuffer operation not allowed";    break;
+			case GL_OUT_OF_MEMORY:                 msg << "OUT OF MEMORY";                        break; // this error is fatal to the GL state
+			default:                               msg << "unknown error: " << error;
 		}
 		msg << ", at " << where;
 		throw std::runtime_error(msg.str());
@@ -65,6 +64,16 @@ GLint get_check_uniform(GLuint program, const GLchar* uniform_name);
 
 // List uniform names on std::cerr, for debugging purposes
 void list_uniforms(GLuint program);
+
+// Enables vextex_attrib_loc + binds and send data into target_buf + VertexAttribdata (to be used with a VAO, or DrawArray)
+template<GLuint TargetT, GLuint UsageT, GLint CompNumber = 3, GLboolean Normalized = GL_FALSE, typename GlT = GLfloat, GLuint DataT = GL_FLOAT>
+void transfer_geometry(GLuint vextex_attrib_loc, GLuint target_buf, const std::vector<GlT>& data, GLsizei stride = 0, const void* pointer = nullptr)
+{
+    glEnableVertexAttribArray(vextex_attrib_loc);
+    glBindBuffer(TargetT, target_buf);
+    glBufferData(TargetT, data.size() * sizeof(GlT), data.data(), UsageT);
+    glVertexAttribPointer(vextex_attrib_loc, CompNumber, DataT, Normalized, stride, pointer);
+}
 
 } // namespace Engine::N3D
 

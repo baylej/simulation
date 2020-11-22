@@ -19,6 +19,8 @@
 
 #include <iostream>
 
+using std::literals::string_literals::operator""s;
+
 constexpr GLsizei log_buf_size = 4096;
 
 namespace Engine::Renderer {
