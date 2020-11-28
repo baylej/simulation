@@ -123,18 +123,38 @@ void Blitter::polygon_filled(const vector<GLfloat>& vertices, glm::vec4 tint) co
 	polygon(vertices, 1.f, tint); // TODO
 }
 
-void Blitter::circle(glm::vec2 center, float radius, GLfloat line_thickness, glm::vec4 tint) const
+// generate `vertices_number` vertices around (0, 0), radius=1.0; `vertices` must be pre-allocated
+// STRIDE: how many float to skip at the begin of vertices
+// CLOSE: close the circle: adds 2 extra floats at the end
+//   (same coords as the first generated vertex, vertices.size must be at least `vertices_number + 2`)
+template<int STRIDE = 0, bool CLOSE = false>
+static constexpr inline void generate_circle_vertices(std::vector<GLfloat>& vertices, int vertices_number, float angle)
+{
+	int it = 0;
+	for (; it<vertices_number; it++) {
+		vertices[STRIDE + it*2]     = cosf(angle * static_cast<float>(it));
+		vertices[STRIDE + it*2 + 1] = sinf(angle * static_cast<float>(it));
+	}
+	if (CLOSE) {
+		vertices[STRIDE + it*2]     = vertices[STRIDE];
+		vertices[STRIDE + it*2 + 1] = vertices[STRIDE + 1];
+	}
+}
+
+static constexpr inline void ideal_vertices_for_radius(float radius, int* prim_gen_number, float* angle)
 {
 	assert(radius > 0.f);
-	float angle = std::ceil(std::log(radius - 3.f) * 10 + 5);
-	int prim_gen_number = static_cast<int>(angle);
-	angle = PI_2 / angle;
+	*prim_gen_number = std::ceil(std::log(radius - 3.f) * 10 + 5);
+	*angle = PI_2 / *prim_gen_number;
+}
 
-	std::vector<GLfloat> vertices(2 * prim_gen_number);
-	for (int it=0; it<prim_gen_number; it++) {
-		vertices[it*2]     = cosf(angle * static_cast<float>(it));
-		vertices[it*2 + 1] = sinf(angle * static_cast<float>(it));
-	}
+void Blitter::circle(glm::vec2 center, float radius, GLfloat line_thickness, glm::vec4 tint) const
+{
+	int vx_count;
+	float angle;
+	ideal_vertices_for_radius(radius, &vx_count, &angle);
+	std::vector<GLfloat> vertices(2 * vx_count);
+	generate_circle_vertices(vertices, vx_count, angle);
 
 	renderer.set_model_matrix(glm::scale(glm::translate(glm::mat4(1.f), glm::vec3(center, 0.f)), glm::vec3(radius, radius, 1.f)));
 	glLineWidth(line_thickness);
@@ -143,6 +163,15 @@ void Blitter::circle(glm::vec2 center, float radius, GLfloat line_thickness, glm
 
 void Blitter::disc(glm::vec2 center, float radius, glm::vec4 tint) const
 {
+	int vx_count;
+	float angle;
+	ideal_vertices_for_radius(radius, &vx_count, &angle);
+	std::vector<GLfloat> vertices(2 * vx_count + 2 + 2); // + STRIDE + CLOSE
+	vertices[0] = vertices[1] = 0.f;
+	generate_circle_vertices<2, true>(vertices, vx_count, angle);
+
+	renderer.set_model_matrix(glm::scale(glm::translate(glm::mat4(1.f), glm::vec3(center, 0.f)), glm::vec3(radius, radius, 1.f)));
+	stream_vertices(vertices, GL_TRIANGLE_FAN, tint);
 }
 
 Blitter::Plane::Plane():
