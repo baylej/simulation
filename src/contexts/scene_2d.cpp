@@ -56,7 +56,7 @@ void Scene2D::loop_run([[maybe_unused]] float delta_t)
 	blitter.polyline({400, 400,   500, 400,   500, 500,   600, 500,   600, 600}, 5.f, {0., 1., 0., 1.});
 	blitter.polygon({400, 200,   500, 200,   550, 300,   450, 300}, 8.f, {0., 0., 1., 1.});
 	blitter.circle({800, 550}, std::abs(cosf(anim_t)) * 145 + 5, 3.f);
-	blitter.disc({800, 250}, std::abs(cosf(anim_t)) * 145 + 5);
+	blitter.disc({800, 250}, std::abs(cosf(anim_t)) * 145 + 5, {.1, .3, .6, 1});
 	Renderer::check_gl_error("Scene2D::loop_run: after blitter.stream_vertices");
 
 	ImGui::SetNextWindowPos({0, 0}); // Top-Left corner
