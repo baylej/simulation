@@ -55,7 +55,7 @@ public:
 	// Draw a rectangle filled with the given colour, rotated on its center
 	void rect_filled(glm::vec2 src_pos, glm::vec2 src_dim, glm::vec4 tint, float angle = 0.f) const;
 
-	// Stream vertices
+	// Stream vertices (does not set the model matrix)
 	void stream_vertices(const std::vector<GLfloat>& vertices, GLenum draw_mode, glm::vec4 tint = glm::vec4(1.)) const;
 
 	void polyline(const std::vector<GLfloat>& vertices, GLfloat line_thickness = 1.0f, glm::vec4 tint = glm::vec4(1.)) const;
