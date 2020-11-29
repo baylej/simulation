@@ -73,14 +73,26 @@ void Blitter::blit(const Texture& tex,
 	blit(tex, model_m4, tex_m3, tint);
 }
 
+static inline glm::mat4 compute_rect_model_m4(const glm::vec2& pos, const glm::vec2& dim, float angle)
+{
+	return glm::translate(glm::mat4(1.), glm::vec3(pos + dim/2.f, 0))
+	     * glm::rotate(glm::mat4(1.), angle, glm::vec3(0, 0, 1))
+	     * glm::translate(glm::mat4(1.), glm::vec3(-dim/2.f, 0))
+	     * glm::scale(glm::mat4(1.), glm::vec3(dim, 0));
+}
+
+void Blitter::rect(glm::vec2 pos, glm::vec2 dim, GLfloat line_thickness, glm::vec4 tint, float angle) const
+{
+	renderer.set_model_matrix(compute_rect_model_m4(pos, dim, angle));
+	renderer.set_has_texture(false);
+	renderer.set_tint_colour(tint);
+	glLineWidth(line_thickness);
+	plane.draw(GL_LINE_LOOP);
+}
+
 void Blitter::rect_filled(glm::vec2 pos, glm::vec2 dim, glm::vec4 tint, float angle) const
 {
-	glm::mat4 model_matrix = glm::translate(glm::mat4(1.), glm::vec3(pos + dim/2.f, 0))
-	                       * glm::rotate(glm::mat4(1.), angle, glm::vec3(0, 0, 1))
-	                       * glm::translate(glm::mat4(1.), glm::vec3(-dim/2.f, 0))
-	                       * glm::scale(glm::mat4(1.), glm::vec3(dim, 0));
-	renderer.set_model_matrix(model_matrix);
-
+	renderer.set_model_matrix(compute_rect_model_m4(pos, dim, angle));
 	renderer.set_has_texture(false);
 	renderer.set_tint_colour(tint);
 	plane.draw(GL_TRIANGLE_FAN);

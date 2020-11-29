@@ -52,8 +52,11 @@ public:
 	          glm::vec2 dst_pos, glm::vec2 dst_dim,
 	          glm::vec2 center = {0,0}, float angle = 0.f, glm::vec4 tint = glm::vec4(1.)) const;
 
+	// Draw a rectangle with the given colour and line thickness, rotated on its center
+	void rect(glm::vec2 pos, glm::vec2 dim, GLfloat line_thickness = 1.0f, glm::vec4 tint = glm::vec4(1.), float angle = 0.f) const;
+
 	// Draw a rectangle filled with the given colour, rotated on its center
-	void rect_filled(glm::vec2 src_pos, glm::vec2 src_dim, glm::vec4 tint, float angle = 0.f) const;
+	void rect_filled(glm::vec2 pos, glm::vec2 dim, glm::vec4 tint = glm::vec4(1.), float angle = 0.f) const;
 
 	// Stream vertices (does not set the model matrix)
 	void stream_vertices(const std::vector<GLfloat>& vertices, GLenum draw_mode, glm::vec4 tint = glm::vec4(1.)) const;

@@ -58,12 +58,19 @@ void Scene2D::loop_run([[maybe_unused]] float delta_t)
 	blitter.rect_filled({0, 0}, {50, 100}, {0, 0, 1, .5}, 3.141592/6.f);
 	blitter.rect_filled({50, 0}, {50, 100}, {1, 1, 1, .5}, 3.141592/5.f);
 	blitter.rect_filled({100, 0}, {50, 100}, {1, 0, 0, .5}, 3.141592/4.f);
+	blitter.rect({0, 0}, {180, 108}, 2.5, {0, 1, 0, .5});
 
 	blitter.stream_vertices({0, 300,  10, 400,  100, 400}, GL_TRIANGLES, {1., 0., 0., 1.});
 	blitter.polyline({400, 400,   500, 400,   500, 500,   600, 500,   600, 600}, 5.f, {0., 1., 0., 1.});
 	blitter.polygon({400, 200,   500, 200,   550, 300,   450, 300}, 8.f, {0., 0., 1., 1.});
 	blitter.circle({800, 550}, std::abs(cosf(anim_t)) * 149 + 1, 1.5f);
 	blitter.disc({800, 250}, std::abs(cosf(anim_t)) * 149 + 1, {.1, .3, .6, 1});
+
+	glm::vec2 dim, center{1280/2., 720/2.};
+	dim = {200, 50}; blitter.rect(center - dim / 2.f, dim, 1.5, {.2, .8, .2, 1}, anim_t * PI/20.f);
+	dim = {175, 50}; blitter.rect(center - dim / 2.f, dim, 1.5, {.2, .7, .2, 1}, anim_t * PI/15.f);
+	dim = {150, 50}; blitter.rect(center - dim / 2.f, dim, 1.5, {.2, .6, .2, 1}, anim_t * PI/10.f);
+	dim = {125, 50}; blitter.rect(center - dim / 2.f, dim, 1.5, {.2, .5, .2, 1}, anim_t * PI/05.f);
 
 	ImGui::SliderFloat("Warp time", &time_warp, 0.01, 1.);
 
