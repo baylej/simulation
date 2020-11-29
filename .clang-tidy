@@ -10,6 +10,7 @@ Checks: '-*,
     -cppcoreguidelines-avoid-magic-numbers,
     -cppcoreguidelines-pro-type-member-init,
     -cppcoreguidelines-pro-type-union-access,
+    -cppcoreguidelines-pro-type-vararg,
   google-explicit-constructor,
   google-runtime-int,
   hicpp-*
@@ -21,7 +22,9 @@ Checks: '-*,
   performance-*,
   portability-*,
   readability-*,
-    -readability-implicit-bool-conversion'
+    -readability-implicit-bool-conversion,
+    -readability-uppercase-literal-suffix,
+    -readability-magic-numbers'
 WarningsAsErrors: ''
 HeaderFilterRegex: '.*'
 ...

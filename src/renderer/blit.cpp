@@ -158,7 +158,7 @@ static inline void ideal_vertices_for_radius(float radius, int* prim_gen_number,
 		*prim_gen_number = std::ceil(std::log2(1.f + variable) * coefficient + min_vx_number); // best coefficient is 6
 	}
 
-	*angle = PI_2 / *prim_gen_number;
+	*angle = PI_2 / static_cast<float>(*prim_gen_number);
 }
 
 void Blitter::circle(glm::vec2 center, float radius, GLfloat line_thickness, glm::vec4 tint) const

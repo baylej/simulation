@@ -30,7 +30,7 @@ namespace Engine::Contexts {
 
 class Scene2D: public Context {
 public:
-	Scene2D(const Renderer::Renderer& renderer);
+	explicit Scene2D(const Renderer::Renderer& renderer);
 
 	void loop_run(float delta_t) override;
 	void start() override;
