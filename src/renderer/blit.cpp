@@ -37,7 +37,7 @@ void Blitter::blit(const Texture& tex, const glm::mat4& model_matrix, const glm:
 
 	renderer.set_tint_colour(tint);
 
-	plane.draw();
+	plane.draw(GL_TRIANGLE_FAN);
 }
 
 void Blitter::blit(const Texture& tex, glm::vec2 dst_pos, glm::vec4 tint) const
@@ -82,7 +82,7 @@ void Blitter::rect_filled(glm::vec2 pos, glm::vec2 dim, glm::vec4 tint, float an
 
 	renderer.set_has_texture(false);
 	renderer.set_tint_colour(tint);
-	plane.draw();
+	plane.draw(GL_TRIANGLE_FAN);
 }
 
 // If drawing lines, Set line thickness before calling this function
@@ -175,7 +175,7 @@ void Blitter::disc(glm::vec2 center, float radius, glm::vec4 tint) const
 }
 
 Blitter::Plane::Plane():
-		Static_indexed_mesh({0, 1, 2, 0, 2, 3}, {0, 0, 0, 0, 1, 0, 1, 1, 0, 1, 0, 0}, {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}, {0, 0, 0, 1, 1, 1, 1, 0})
+		Static_indexed_mesh({0, 1, 2, 3}, {0, 0, 0, 0, 1, 0, 1, 1, 0, 1, 0, 0}, {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}, {0, 0, 0, 1, 1, 1, 1, 0})
 {}
 
 } // namespace Engine::Renderer
