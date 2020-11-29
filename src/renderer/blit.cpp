@@ -129,26 +129,35 @@ void Blitter::polygon_filled(const vector<GLfloat>& vertices, glm::vec4 tint) co
 // CLOSE: close the circle: adds 2 extra floats at the end
 //   (same coords as the first generated vertex, vertices.size must be at least `vertices_number + 2`)
 template<int STRIDE = 0, bool CLOSE = false>
-static constexpr inline void generate_circle_vertices(std::vector<GLfloat>& vertices, int vertices_number, float angle)
+static inline void generate_circle_vertices(std::vector<GLfloat>& vertices, int vertices_number, float angle)
 {
 	int it = 0;
 	for (; it<vertices_number; it++) {
 		vertices[STRIDE + it*2]     = cosf(angle * static_cast<float>(it));
 		vertices[STRIDE + it*2 + 1] = sinf(angle * static_cast<float>(it));
 	}
-	if (CLOSE) {
+	if constexpr (CLOSE) {
 		vertices[STRIDE + it*2]     = vertices[STRIDE];
 		vertices[STRIDE + it*2 + 1] = vertices[STRIDE + 1];
 	}
 }
 
 // computes the ideal number of vertices (and angle) for the given radius so the circle looks smooth
-static constexpr inline void ideal_vertices_for_radius(float radius, int* prim_gen_number, float* angle)
+template<bool LINEAR = false>
+static inline void ideal_vertices_for_radius(float radius, int* prim_gen_number, float* angle)
 {
-	constexpr float min_radius = 1.f;
-	constexpr float min_vx_number = 6.f;
-	constexpr float coefficient = 5;
-	*prim_gen_number = std::ceil(std::log(std::max(radius, min_radius)) * coefficient + min_vx_number);
+	constexpr float min_vx_number = 5.f;   // generate at least this number of vertices
+	constexpr float   coefficient = 6.f;   // the bigger the smoother (the slower)
+	constexpr float  start_growth = 4.f;   // minimum radius for which this function begins to generate more than `min_vx_number` vertices
+
+	if constexpr (LINEAR) {
+		*prim_gen_number = std::ceil(std::max(0.f, radius - start_growth) * coefficient + min_vx_number); // best coefficient is .5
+	}
+	else {
+		float variable = std::max(0.f, radius - start_growth);
+		*prim_gen_number = std::ceil(std::log2(1.f + variable) * coefficient + min_vx_number); // best coefficient is 6
+	}
+
 	*angle = PI_2 / *prim_gen_number;
 }
 
@@ -160,9 +169,7 @@ void Blitter::circle(glm::vec2 center, float radius, GLfloat line_thickness, glm
 	std::vector<GLfloat> vertices(2 * vx_count);
 	generate_circle_vertices(vertices, vx_count, angle);
 
-#ifndef NDEBUG
-	ImGui::Text("Generating %2d vertices for r=%f", vx_count, radius);
-#endif
+	ImGui::Text("Circle: %2d vertices for radius=%f", vx_count, radius);
 
 	renderer.set_model_matrix(glm::scale(glm::translate(glm::mat4(1.f), glm::vec3(center, 0.f)), glm::vec3(radius, radius, 1.f)));
 	glLineWidth(line_thickness);
