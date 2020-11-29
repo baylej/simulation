@@ -19,6 +19,7 @@
 #include "utils.hpp"
 
 #include <glm/ext/matrix_transform.hpp>
+#include <imgui/imgui.h>
 
 namespace Engine::Renderer {
 
@@ -141,10 +142,13 @@ static constexpr inline void generate_circle_vertices(std::vector<GLfloat>& vert
 	}
 }
 
+// computes the ideal number of vertices (and angle) for the given radius so the circle looks smooth
 static constexpr inline void ideal_vertices_for_radius(float radius, int* prim_gen_number, float* angle)
 {
-	assert(radius > 0.f);
-	*prim_gen_number = std::ceil(std::log(radius - 3.f) * 10 + 5);
+	constexpr float min_radius = 1.f;
+	constexpr float min_vx_number = 6.f;
+	constexpr float coefficient = 5;
+	*prim_gen_number = std::ceil(std::log(std::max(radius, min_radius)) * coefficient + min_vx_number);
 	*angle = PI_2 / *prim_gen_number;
 }
 
@@ -155,6 +159,10 @@ void Blitter::circle(glm::vec2 center, float radius, GLfloat line_thickness, glm
 	ideal_vertices_for_radius(radius, &vx_count, &angle);
 	std::vector<GLfloat> vertices(2 * vx_count);
 	generate_circle_vertices(vertices, vx_count, angle);
+
+#ifndef NDEBUG
+	ImGui::Text("Generating %2d vertices for r=%f", vx_count, radius);
+#endif
 
 	renderer.set_model_matrix(glm::scale(glm::translate(glm::mat4(1.f), glm::vec3(center, 0.f)), glm::vec3(radius, radius, 1.f)));
 	glLineWidth(line_thickness);

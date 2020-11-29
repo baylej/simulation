@@ -41,6 +41,7 @@ private:
 	Renderer::Texture texture;
 
 	float anim_t = 0;
+	float time_warp = 1;
 };
 
 } // namespace Engine::Contexts
