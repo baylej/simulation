@@ -37,7 +37,7 @@ target_compile_definitions(simulation
   PRIVATE STBI_NO_HDR)
 
 if(CMAKE_BUILD_TYPE STREQUAL "Release")
-  target_compile_definitions(simulation GLM_FORCE_INLINE)
+  target_compile_definitions(simulation PRIVATE GLM_FORCE_INLINE)
 endif()
 
 if(EMSCRIPTEN)
